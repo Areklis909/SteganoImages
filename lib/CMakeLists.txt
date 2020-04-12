@@ -1,0 +1,5 @@
+add_subdirectory(ImageHandler)
+add_subdirectory(CharBit)
+add_subdirectory(TextToBitsConverter)
+add_subdirectory(BitsToSignConverter)
+add_subdirectory(ImageEncryptor)
