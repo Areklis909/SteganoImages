@@ -16,6 +16,7 @@ public:
     ~ImageEncryptor();
 
     void encrypt(const std::string & message);
+    void encrypt2(const std::string & message);
 };
 
 }

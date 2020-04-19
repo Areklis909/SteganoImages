@@ -22,7 +22,6 @@ public:
         for(const auto character : message) {
             convertSignToBits(ret, character);
         }
-        // std::reverse(ret.begin(), ret.end());
         std::cout << '\n';
         return ret;
     }
@@ -39,7 +38,6 @@ public:
         }
         std::cout << '\n';
     }
-
 };
 
 }
