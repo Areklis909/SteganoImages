@@ -1,7 +1,11 @@
 #include <ImageEncryptor/ImageEncryptor.hpp>
-
+#include <ImageDecoder/ImageDecoder.hpp>
 int main() {
-    NsImageEncryptor::ImageEncryptor encryptor("/home/alis/SteganoImages/src/obraz.PNG", "/home/alis/SteganoImages/src/obraz2.PNG");
-    encryptor.encrypt2("Arek");
+    const std::string inputPath {"/home/alis/SteganoImages/src/obraz.PNG"};
+    const std::string outputPath {"/home/alis/SteganoImages/src/obraz2.PNG"};
+    NsImageEncryptor::ImageEncryptor encryptor(inputPath, outputPath);
+    encryptor.encryptData("Arek");
+    NsImageDecoder::ImageDecoder decoder(outputPath);
+    decoder.readMessage();
     return 0;
 }

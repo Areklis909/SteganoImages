@@ -13,16 +13,29 @@ ImageHandler::ImageHandler(const std::string & imagePath, const std::string & pa
     greenChannel(1),
     blueChannel(0)
 {
+    checkImageProperties(imagePath);
+}
+
+ImageHandler::ImageHandler(const std::string & imagePath) : image(cv::imread(imagePath)),
+    pathToWrite(""),
+    redChannel(2),
+    greenChannel(1),
+    blueChannel(0)
+{
+    checkImageProperties(imagePath);
+}
+
+void ImageHandler::checkImageProperties(const std::string & imagePath) {
     if(image.empty() || image.depth() != CV_8U) {
         throw std::runtime_error("Failed to open requested image: " + imagePath);
     }
-
-
     numOfPixels = channels() * rows() * cols();
 }
 
 ImageHandler::~ImageHandler() {
-    cv::imwrite(pathToWrite, image);
+    if(pathToWrite.empty() == false) {
+        cv::imwrite(pathToWrite, image);
+    }
 }
 
 int ImageHandler::channels() const {
@@ -64,7 +77,6 @@ cv::Mat & ImageHandler::getBlueChannel() {
 int ImageHandler::getNumOfPixels() const {
     return numOfPixels;
 }
-
 
 }
 

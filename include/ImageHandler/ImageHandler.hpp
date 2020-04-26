@@ -20,9 +20,11 @@ class ImageHandler {
     std::vector<cv::Mat> splitChannels;
 
     cv::Mat & getChannel(const int channelNumber);
+    void checkImageProperties(const std::string & imagePath);
 public:
 
     ImageHandler(const std::string & imagePath, const std::string & pathToWrite);
+    ImageHandler(const std::string & imagePath);
     ~ImageHandler();
 
     int channels() const;
@@ -34,6 +36,8 @@ public:
     cv::Mat & getRedChannel();
     cv::Mat & getGreenChannel();
     cv::Mat & getBlueChannel();
+
+    void putMessageLength(const int32_t messageLength, const int start);
 
     template<typename Procedure>
     void applyToEveryPixelRaw(Procedure procedure) {
