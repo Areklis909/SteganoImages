@@ -28,8 +28,6 @@ class ImageEncryptor {
         return std::make_pair(start, start + msgSizeInBits);
     }
 
-    // void encodeMessageLength(const int messageLength);
-
     template<typename T>
     char * toBytes(T data) {
         T * ptr = static_cast<T *>(&data);
@@ -55,7 +53,7 @@ class ImageEncryptor {
             const int32_t lsbMask = 0x1;
             const unsigned char tmp = bytes[index/bitsInByte];
             const int bitNum = index % bitsInByte;
-            const bool val = tmp & (1 << bitNum);
+            const bool val = (tmp & (1 << bitNum)) == (1 << bitNum);
             byte &= ~lsbMask;
             byte |= (val << 0);
             index++;

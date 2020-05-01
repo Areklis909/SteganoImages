@@ -119,19 +119,22 @@ public:
         const int numberOfRows = (image.isContinuous() == true) ? 1 : rows();
         const int numberOfCols = (image.isContinuous() == true) ? cols() * numberOfRows : cols();
         const int msgSize = end - start;
-
+        
         if(msgSize > numberOfRows * numberOfCols) {
             throw std::runtime_error("Message too big!");
         }
 
-        const int msgNumOfRows = msgSize/numberOfCols;
+        const int startRow = start / numberOfCols;
+        const int startCol = start % numberOfCols;
+        const int msgNumOfRows = msgSize / numberOfCols;
         const int restCols = msgSize % numberOfCols;
 
         unsigned char * ptr;
-        for(int i = 0; i <= msgNumOfRows; ++i) {
+        for(int i = startRow; i <= startRow + msgNumOfRows; ++i) {
             ptr = image.ptr<unsigned char>(i);
-            int jMax = (i == msgNumOfRows) ? restCols : numberOfCols;
-            for(int j = 0; j < jMax; ++j) {
+            const int jMax = (i == msgNumOfRows + startRow) ? restCols : numberOfCols;
+            const int jStart = (i == startRow) ? startCol : 0;
+            for(int j = jStart; j < jStart + jMax; ++j) {
                 procedure(ptr[j]);
             }
         }        

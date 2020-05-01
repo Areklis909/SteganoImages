@@ -30,6 +30,7 @@ void ImageHandler::checkImageProperties(const std::string & imagePath) {
         throw std::runtime_error("Failed to open requested image: " + imagePath);
     }
     numOfPixels = channels() * rows() * cols();
+    std::cout << "rows: " << rows() << " cols: " << cols() << " is continuous: " << image.isContinuous() << '\n';
 }
 
 ImageHandler::~ImageHandler() {

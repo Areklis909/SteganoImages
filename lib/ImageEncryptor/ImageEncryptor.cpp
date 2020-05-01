@@ -43,10 +43,9 @@ void ImageEncryptor::encrypt(const std::string & message, const int startPoint) 
         // get message byte value, current bit number and bit value
         const unsigned char tmp = message.at(index/bitsInByte);
         const int bitNum = index % bitsInByte;
-        const int val = tmp & (1 << bitNum);
-        const int8_t value = (val << 0);
+        const bool val = (tmp & (1 << bitNum)) == (1 << bitNum);
         byte &= (~lsbMask);
-        byte |= (value);
+        byte |= (val << 0);
         ++index; 
     };
     imageHandler.applyToEveryPixelInRangeRaw(putMessageBitIntoPixel, range.first, range.second);
@@ -62,8 +61,10 @@ std::pair<int, int> ImageEncryptor::getMessageRange(const std::string & message,
 }
 
 void ImageEncryptor::encryptData(const std::string & message) {
-    encrypt(message.size(), msgSizeStartPoint);
-    // encrypt(message, msgBodyStartPoint);
+    using namespace NsConstData;
+    const size_t sz = message.size() * bitsInByte;
+    encrypt(sz, msgSizeStartPoint);
+    encrypt(message, msgBodyStartPoint); 
 }
 
 
