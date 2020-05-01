@@ -39,13 +39,11 @@ void ImageEncryptor::encrypt(const std::string & message, const int startPoint) 
     int index = 0;
 
     auto putMessageBitIntoPixel = [&](unsigned char & byte){
-        const int8_t lsbMask = 0x1;
         // get message byte value, current bit number and bit value
         const unsigned char tmp = message.at(index/bitsInByte);
         const int bitNum = index % bitsInByte;
-        const bool val = (tmp & (1 << bitNum)) == (1 << bitNum);
-        byte &= (~lsbMask);
-        byte |= (val << 0);
+        const bool val = checkBit(tmp, bitNum);
+        byte = setFirstBit(byte, val);
         ++index; 
     };
     imageHandler.applyToEveryPixelInRangeRaw(putMessageBitIntoPixel, range.first, range.second);

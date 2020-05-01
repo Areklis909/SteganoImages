@@ -4,12 +4,12 @@
 #include <ImageHandler/ImageHandler.hpp>
 #include <TextToBitsConverter/TextToBitsConverter.hpp>
 #include <ConstData/ConstData.hpp>
-
+#include <BitwiseOperations/BitwiseOperations.hpp> 
 #include <type_traits>
 
 namespace NsImageEncryptor {
 
-class ImageEncryptor {
+class ImageEncryptor : public NsBitwiseOperations::BitwiseOperations {
 
     NsImageHandler::ImageHandler imageHandler;
     NsTextToBitsConverter::TextToBitsConverter converter;
@@ -50,12 +50,10 @@ class ImageEncryptor {
         char * bytes = toBytes(message);
         auto putMessageBitIntoPixel = [&](unsigned char & byte){
             // get message byte value, current bit number and bit value
-            const int32_t lsbMask = 0x1;
             const unsigned char tmp = bytes[index/bitsInByte];
             const int bitNum = index % bitsInByte;
-            const bool val = (tmp & (1 << bitNum)) == (1 << bitNum);
-            byte &= ~lsbMask;
-            byte |= (val << 0);
+            const bool val = checkBit(tmp, bitNum);
+            byte = setFirstBit(byte, val);
             index++;
         };
 

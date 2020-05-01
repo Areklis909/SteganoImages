@@ -3,10 +3,11 @@
 
 #include <ImageHandler/ImageHandler.hpp>
 #include <ConstData/ConstData.hpp>
+#include <BitwiseOperations/BitwiseOperations.hpp>
 
 namespace NsImageDecoder {
 
-class ImageDecoder {
+class ImageDecoder : public NsBitwiseOperations::BitwiseOperations {
 
     NsImageHandler::ImageHandler image;
 

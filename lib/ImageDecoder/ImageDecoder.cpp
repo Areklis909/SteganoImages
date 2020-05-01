@@ -20,9 +20,8 @@ size_t ImageDecoder::getMessageSize() {
     size_t msgSize {0};
     int32_t index {0};
     auto readMsgSize = [&](const unsigned char byte){
-        const int32_t lsbMask = 0x1;
-        const bool bitValue = byte & lsbMask;
-        msgSize |= (bitValue << index++);
+        const bool bitValue = checkFirstBit(byte);
+        msgSize = setBit(msgSize, bitValue, index++);
     };
 
     image.applyToEveryPixelInRangeRaw(readMsgSize, msgSizeStartPoint, msgBodyStartPoint);
@@ -31,7 +30,6 @@ size_t ImageDecoder::getMessageSize() {
 
 std::string ImageDecoder::readMessage() {
     const size_t msgSize = getMessageSize();
-    std::cout << "Message length: " << msgSize << '\n';
     const std::string msg = getMessage(msgSize);
     return msg;
 }
@@ -44,9 +42,8 @@ std::string ImageDecoder::getMessage(const size_t messageSize) {
     int32_t index {0};
     auto assembleTheMessage = [&](const unsigned char byte){
         const int bitNum = index % bitsInByte;
-        const int32_t lsbMask = 0x1;
-        const bool bitValue = byte & lsbMask;
-        currentCharacter |= (bitValue << bitNum);
+        const bool bitValue = checkFirstBit(byte);
+        currentCharacter = setBit(currentCharacter, bitValue, bitNum);
         if(bitNum == bitsInByte - 1) {
             stream << currentCharacter;
             currentCharacter = 0;
