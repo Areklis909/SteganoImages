@@ -1,1 +1,0 @@
-#include <BitsToSignConverter/BitsToSignConverter.hpp>

@@ -1,20 +1,19 @@
 #ifndef IMAGE_ENCRYPTOR_HPP
 #define IMAGE_ENCRYPTOR_HPP
 
-#include <ImageHandler/ImageHandler.hpp>
-#include <TextToBitsConverter/TextToBitsConverter.hpp>
+#include <type_traits>
 #include <ConstData/ConstData.hpp>
 #include <BitwiseOperations/BitwiseOperations.hpp> 
-#include <type_traits>
+#include <ImageHandler/ImageHandler.hpp>
 
 namespace NsImageEncryptor {
 
 class ImageEncryptor : public NsBitwiseOperations::BitwiseOperations {
 
     NsImageHandler::ImageHandler imageHandler;
-    NsTextToBitsConverter::TextToBitsConverter converter;
 
     std::pair<int, int> getMessageRange(const std::string & message, const int start);
+    void encrypt(const std::string & message, const int startPoint);
 
     template<typename T>
     std::pair<int, int> getMessageRange(T message, const int start) {
@@ -35,7 +34,6 @@ class ImageEncryptor : public NsBitwiseOperations::BitwiseOperations {
         return static_cast<char *>(dataBuf);
     }
 
-    void encrypt(const std::string & message, const int startPoint);
 
     template<typename T, 
         typename std::enable_if<std::is_pod_v<T>
@@ -56,7 +54,6 @@ class ImageEncryptor : public NsBitwiseOperations::BitwiseOperations {
             byte = setFirstBit(byte, val);
             index++;
         };
-
         imageHandler.applyToEveryPixelInRangeRaw(putMessageBitIntoPixel, range.first, range.second);
     }
 
@@ -64,7 +61,6 @@ public:
     ImageEncryptor(const std::string & imagePath, const std::string & pathToWrite);
     ~ImageEncryptor();
 
-    void encryptTest(const std::string & message);
     void encryptData(const std::string & message);
 };
 

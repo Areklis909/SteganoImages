@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
-set(TARGET SteganoImage)
-set(LIB_LIST ImageHandler CharBit TextToBitsConverter BitsToSignConverter ImageEncryptor ImageDecoder)
+set(TARGET stegano)
+set(LIB_LIST ImageHandler ImageEncryptor ImageDecoder CommandLineParser)
 
 add_executable(${TARGET} main.cpp)
 

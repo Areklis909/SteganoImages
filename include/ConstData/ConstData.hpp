@@ -1,6 +1,9 @@
 #ifndef CONST_DATA_HPP
 #define CONST_DATA_HPP
 
+#include <cstddef>
+#include <cstdint>
+
 namespace NsConstData {
 
 const int bitsInByte = 8;
