@@ -10,8 +10,8 @@ CommandLineParser::CommandLineParser() : optionsDescription("Allowed options") {
     // produces proxy object with overloaded operator()
     optionsDescription.add_options()
         (helpStr, "Show help message")
-        (inputImageStr, po::value<std::string>(), "Path of file to process")
-        (outputImageStr, po::value<std::string>(), "Processed file name")
+        (inputImageStr, po::value<std::string>(), "Path of image to process")
+        (outputImageStr, po::value<std::string>(), "Processed image name")
         (messageFileStr, po::value<std::string>(), "Path to file containing a message")
         (messageStr, po::value<std::string>(), "Message supplied directly to command line")
         (modeStr, po::value<std::string>(), "ProcessingMode: [encoding|decoding]");

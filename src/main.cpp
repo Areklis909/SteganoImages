@@ -3,18 +3,24 @@
 #include <CommandLineParser/CommandLineParser.hpp>
 
 int main(int argc, char ** argv) {
-    NsSteganoCommandLineParser::CommandLineParser parser;
+    using NsSteganoCommandLineParser::CommandLineParser;
+    using namespace NsProcessingMode;
+
+    CommandLineParser parser;
     parser.parseCommandLine(argc, argv);
 
-    const std::string inputPath {parser.getInputImagePath()};
-    const std::string outputPath {parser.getOutputImagePath()};
-    {
-        NsImageEncryptor::ImageEncryptor encryptor(inputPath, outputPath);
+    const std::string input {parser.getInputImagePath()};
+    if(parser.getProcessingMode() == ProcessingMode::fromString("encoding")) {
+        const std::string output {parser.getOutputImagePath()};
+        NsImageEncryptor::ImageEncryptor encryptor(input, output);
         encryptor.encryptData("Przykladowa wiadomosc");
+    } else if(parser.getProcessingMode() == ProcessingMode::fromString("decoding")) {
+        NsImageDecoder::ImageDecoder decoder(input);
+        const std::string text = decoder.readMessage();
+        std::cout << text << '\n';
+    } else {
+        std::cout << "Wrong command line options!\n";
     }
-    
-    NsImageDecoder::ImageDecoder decoder(outputPath);
-    const std::string output = decoder.readMessage();
-    std::cout << output << '\n';
+
     return 0;
 }

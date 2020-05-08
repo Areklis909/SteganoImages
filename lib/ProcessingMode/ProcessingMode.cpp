@@ -23,7 +23,7 @@ ProcessingMode ProcessingMode::fromString(const std::string & strMode) {
 }
 
 std::string ProcessingMode::toString() {
-    std::string ret = "";
+    std::string ret;
     switch(mode) {
         case ProcessingModeType::ENCODING:
         {
@@ -41,6 +41,10 @@ std::string ProcessingMode::toString() {
         }
     }
     return ret;
+}
+
+bool ProcessingMode::operator==(const ProcessingMode & other) {
+    return other.mode == mode;
 }
 
 

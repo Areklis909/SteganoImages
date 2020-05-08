@@ -14,8 +14,8 @@ class CommandLineParser {
     po::variables_map variablesMap;
 
     const char * helpStr = "help";
-    const char * inputImageStr = "input-image";
-    const char * outputImageStr = "output-image";
+    const char * inputImageStr = "input";
+    const char * outputImageStr = "output";
     const char * messageFileStr = "message-file";
     const char * messageStr = "message";
     const char * modeStr = "mode";
