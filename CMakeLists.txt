@@ -11,10 +11,14 @@ include_directories(${CMAKE_SOURCE_DIR}/include)
 find_package(OpenCV REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
 
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
+
 find_library(boost_program_options_location NAMES libboost_program_options.so)
 message(STATUS ${boost_program_options_location})
 add_library(boost_program_options SHARED IMPORTED)
 set_target_properties(boost_program_options PROPERTIES IMPORTED_LOCATION ${boost_program_options_location})
+
 
 add_subdirectory(lib)
 add_subdirectory(src)

@@ -13,7 +13,7 @@ int main(int argc, char ** argv) {
     if(parser.getProcessingMode() == ProcessingMode::fromString("encoding")) {
         const std::string output {parser.getOutputImagePath()};
         NsImageEncryptor::ImageEncryptor encryptor(input, output);
-        encryptor.encryptData("Przykladowa wiadomosc");
+        encryptor.encryptData(parser.getMessage());
     } else if(parser.getProcessingMode() == ProcessingMode::fromString("decoding")) {
         NsImageDecoder::ImageDecoder decoder(input);
         const std::string text = decoder.readMessage();

@@ -3,16 +3,15 @@
 
 #include <utility>
 #include <ImageEncryptor/ImageEncryptor.hpp>
+#include <ParallelEncoder/ParallelEncoder.hpp>
 
 namespace NsImageEncryptor {
 
 using namespace NsConstData;
 
 ImageEncryptor::ImageEncryptor(const std::string & imagePath, const std::string & pathToWrite) :
-    imageHandler(imagePath, pathToWrite)
-{
-
-}
+    imageHandler(imagePath, pathToWrite), messageLengthThreshold(100)
+{}
 
 ImageEncryptor::~ImageEncryptor() {}
 
@@ -42,9 +41,18 @@ std::pair<int, int> ImageEncryptor::getMessageRange(const std::string & message,
 
 void ImageEncryptor::encryptData(const std::string & message) {
     using namespace NsConstData;
+    using namespace NsParallelEncoder;
+
     const size_t sz = message.size() * bitsInByte;
-    encrypt(sz, msgSizeStartPoint);
-    encrypt(message, msgBodyStartPoint); 
+    encodeMessageSize(sz, msgSizeStartPoint);
+    if(message.length() < messageLengthThreshold) {
+        encrypt(message, msgBodyStartPoint);
+    } else {
+        ParallelTask task(&ImageEncryptor::encrypt, this, message, msgBodyStartPoint);
+        std::vector<decltype(task)> tasks; 
+        tasks.push_back(task);
+        ParallelEncoder parallelEncoder(tasks);
+    }
 }
 
 

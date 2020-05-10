@@ -11,6 +11,7 @@ namespace NsImageEncryptor {
 class ImageEncryptor : public NsBitwiseOperations::BitwiseOperations {
 
     NsImageHandler::ImageHandler imageHandler;
+    const size_t messageLengthThreshold;
 
     std::pair<int, int> getMessageRange(const std::string & message, const int start);
     void encrypt(const std::string & message, const int startPoint);
@@ -34,12 +35,7 @@ class ImageEncryptor : public NsBitwiseOperations::BitwiseOperations {
         return static_cast<char *>(dataBuf);
     }
 
-
-    template<typename T, 
-        typename std::enable_if<std::is_pod_v<T>
-        && !std::is_class_v<T>
-        && !std::is_array_v<T> >::type* = nullptr>
-    void encrypt(T message, const int startPoint) {
+    void encodeMessageSize(const size_t message, const int startPoint) {
         using namespace NsConstData;
 
         const auto range = getMessageRange(message, startPoint);
