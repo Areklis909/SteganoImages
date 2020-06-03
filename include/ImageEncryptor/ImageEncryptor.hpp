@@ -5,6 +5,8 @@
 #include <ConstData/ConstData.hpp>
 #include <BitwiseOperations/BitwiseOperations.hpp> 
 #include <ImageHandler/ImageHandler.hpp>
+#include <ParallelEncoder/TaskDetail.hpp>
+#include <ParallelEncoder/ParallelEncoder.hpp>
 
 namespace NsImageEncryptor {
 
@@ -12,12 +14,19 @@ class ImageEncryptor : public NsBitwiseOperations::BitwiseOperations {
 
     NsImageHandler::ImageHandler imageHandler;
     const size_t messageLengthThreshold;
+    const size_t noThreads;
 
-    std::pair<int, int> getMessageRange(const std::string & message, const int start);
-    void encrypt(const std::string & message, const int startPoint);
+    NsRange::Range getMessageRange(const std::string & message, const int start);
+    void encryptMulti(const NsTaskDetail::TaskDetail taskDetail);
+    void encryptSingle(const std::string & message, const int startPoint);
+    std::vector<NsRange::Range> divideIntoRanges(const std::string & message, const int start);
+    std::vector<std::string_view> divideIntoSubmessages(const std::string & message, const std::vector<NsRange::Range> & ranges);
+    std::vector<NsTaskDetail::TaskDetail> getTaskDetails(const std::string & message, const int start);
+
 
     template<typename T>
-    std::pair<int, int> getMessageRange(T message, const int start) {
+    NsRange::Range getMessageRange(T message, const int start) {
+        using NsRange::Range;
         using namespace NsConstData;
 
         const int msgSizeInBits = sizeof(message) * bitsInByte;
@@ -25,7 +34,7 @@ class ImageEncryptor : public NsBitwiseOperations::BitwiseOperations {
         if(msgSizeInBits > allPixels) {
             throw std::runtime_error("Message is too big!");
         }
-        return std::make_pair(start, start + msgSizeInBits);
+        return Range(start, start + msgSizeInBits);
     }
 
     template<typename T>
@@ -50,7 +59,7 @@ class ImageEncryptor : public NsBitwiseOperations::BitwiseOperations {
             byte = setFirstBit(byte, val);
             index++;
         };
-        imageHandler.applyToEveryPixelInRangeRaw(putMessageBitIntoPixel, range.first, range.second);
+        imageHandler.applyToEveryPixelInRangeRaw(putMessageBitIntoPixel, range.start(), range.end());
     }
 
 public:

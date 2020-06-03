@@ -137,7 +137,7 @@ public:
             for(int j = jStart; j < jStart + jMax; ++j) {
                 procedure(ptr[j]);
             }
-        }        
+        }
     }
 
 };

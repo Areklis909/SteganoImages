@@ -11,7 +11,7 @@ namespace NsParallelEncoder {
 template<typename Task>
 class ParallelEncoder {
 
-    std::vector< decltype(std::async(std::launch::async, std::declval<Task>())) > futures;
+    std::vector<decltype(std::async(std::launch::async, std::declval<Task>())) > futures;
 public:
     ParallelEncoder(const std::vector<Task> & tasks) {
         for(const auto task : tasks) {
