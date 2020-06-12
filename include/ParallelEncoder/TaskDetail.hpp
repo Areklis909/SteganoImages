@@ -1,23 +1,23 @@
 #ifndef TASK_DETAIL_HPP
 #define TASK_DETAIL_HPP
 
-#include <string_view>
 #include <Range/Range.hpp>
+#include <string_view>
 
 namespace NsTaskDetail {
 
 class TaskDetail {
 
-    const std::string_view submessage;
-    const NsRange::Range range;
+  const std::string_view submessage;
+  const NsRange::Range range;
+
 public:
-    TaskDetail(const std::string_view & submessage, const NsRange::Range & range);
-    ~TaskDetail();
-    std::string_view getMessage() const;
-    NsRange::Range getRange() const;
+  TaskDetail(const std::string_view &submessage, const NsRange::Range &range);
+  ~TaskDetail();
+  std::string_view getMessage() const;
+  NsRange::Range getRange() const;
 };
 
-
-}
+} // namespace NsTaskDetail
 
 #endif

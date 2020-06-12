@@ -1,9 +1,5 @@
 
 namespace NsProcessingMode {
 
-enum ProcessingModeType {
-    ENCODING,
-    DECODING
-};
-
+enum ProcessingModeType { ENCODING, DECODING };
 }
