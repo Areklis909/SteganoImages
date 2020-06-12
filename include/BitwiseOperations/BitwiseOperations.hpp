@@ -1,6 +1,8 @@
 #ifndef BITWISE_OPERATIONS_HPP
 #define BITWISE_OPERATIONS_HPP
 
+#include <cstdint>
+
 namespace NsBitwiseOperations {
 
 class BitwiseOperations {

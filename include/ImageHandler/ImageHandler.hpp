@@ -37,17 +37,6 @@ public:
   cv::Mat &getGreenChannel();
   cv::Mat &getBlueChannel();
 
-  void putMessageLength(const int32_t messageLength, const int start);
-
-  template <typename Procedure> void applyToEveryPixelRaw(Procedure procedure) {
-
-    const int numberOfRows = (image.isContinuous() == true) ? 1 : rows();
-    const int numberOfCols =
-        (image.isContinuous() == true) ? cols() * numberOfRows : cols();
-
-    applyToEveryPixelInRangeRaw(procedure, 0, numberOfRows * numberOfCols);
-  }
-
   template <typename Procedure>
   void applyToEveryPixelGrayscale(Procedure procedure, const int start,
                                   const int end) {
@@ -115,10 +104,12 @@ public:
       throw std::runtime_error("Start > end!");
     }
 
-    const int numberOfRows = (image.isContinuous() == true) ? 1 : rows();
-    const int numberOfCols =
-        (image.isContinuous() == true) ? cols() * numberOfRows : cols();
     const int msgSize = end - start;
+    int numberOfRows {cols()}, numberOfCols {rows()};
+    if(image.isContinuous() == true) {
+      numberOfCols *= numberOfRows;
+      numberOfRows = 1;
+    }
 
     if (msgSize > numberOfRows * numberOfCols) {
       throw std::runtime_error("Message too big!");

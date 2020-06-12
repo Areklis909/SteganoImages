@@ -11,8 +11,8 @@ using namespace NsConstData;
 
 ImageEncryptor::ImageEncryptor(const std::string &imagePath,
                                const std::string &pathToWrite)
-    : imageHandler(imagePath, pathToWrite), messageLengthThreshold(10),
-      noThreads(2) {}
+    : imageHandler(imagePath, pathToWrite), messageLengthThreshold(50),
+      noThreads(3) {}
 
 ImageEncryptor::~ImageEncryptor() {}
 
