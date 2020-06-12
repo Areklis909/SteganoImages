@@ -105,8 +105,8 @@ public:
     }
 
     const int msgSize = end - start;
-    int numberOfRows {cols()}, numberOfCols {rows()};
-    if(image.isContinuous() == true) {
+    int numberOfRows{cols()}, numberOfCols{rows()};
+    if (image.isContinuous() == true) {
       numberOfCols *= numberOfRows;
       numberOfRows = 1;
     }
