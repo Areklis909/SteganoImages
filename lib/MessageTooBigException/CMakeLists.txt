@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.9)
 
-set(TARGET ImageHandler)
+set(TARGET MessageTooBigException)
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
 project(${TARGET} VERSION 1.0.1 DESCRIPTION "ImageHandler")
 
-add_library(${TARGET} ImageHandler.cpp)
+add_library(${TARGET} MessageTooBigException.cpp)
 
-target_link_libraries(${TARGET}
-    opencv_imgcodecs MessageTooBigException)
+# target_link_libraries(${TARGET}
+#     opencv_imgcodecs)

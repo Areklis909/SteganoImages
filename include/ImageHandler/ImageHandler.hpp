@@ -37,6 +37,8 @@ public:
   cv::Mat &getGreenChannel();
   cv::Mat &getBlueChannel();
 
+  void verifyMessageSize(const size_t messageSize);
+
   template <typename Procedure>
   void applyToEveryPixelGrayscale(Procedure procedure, const int start,
                                   const int end) {
@@ -110,10 +112,7 @@ public:
       numberOfCols *= numberOfRows;
       numberOfRows = 1;
     }
-
-    if (msgSize > numberOfRows * numberOfCols) {
-      throw std::runtime_error("Message too big!");
-    }
+    numberOfCols *= channels();
 
     const int startRow = start / numberOfCols;
     const int startCol = start % numberOfCols;

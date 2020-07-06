@@ -2,7 +2,8 @@
 #define IMAGE_HANDLER_CPP
 
 #include <ImageHandler/ImageHandler.hpp>
-#include <exception>
+#include <ConstData/ConstData.hpp>
+#include <MessageTooBigException/MessageTooBigException.hpp>
 
 namespace NsImageHandler {
 
@@ -77,6 +78,15 @@ cv::Mat & ImageHandler::getBlueChannel() {
 
 int ImageHandler::getNumOfPixels() const {
     return numOfPixels;
+}
+
+void ImageHandler::verifyMessageSize(const size_t messageSize) {
+    using namespace NsConstData;
+    using namespace NsMessageTooBigException;
+    const size_t maxSize = (cols() * rows()) - msgBodyStartPoint;
+    if(messageSize > maxSize) {
+        throw MessageTooBigException();
+    }
 }
 
 }

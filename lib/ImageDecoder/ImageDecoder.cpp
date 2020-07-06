@@ -19,7 +19,6 @@ size_t ImageDecoder::getMessageSize() {
     const bool bitValue = checkFirstBit(byte);
     msgSize = setBit(msgSize, bitValue, index++);
   };
-
   image.applyToEveryPixelInRangeRaw(readMsgSize, msgSizeStartPoint,
                                     msgBodyStartPoint);
   return msgSize;

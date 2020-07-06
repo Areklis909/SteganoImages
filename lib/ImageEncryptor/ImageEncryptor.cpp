@@ -11,7 +11,7 @@ using namespace NsConstData;
 
 ImageEncryptor::ImageEncryptor(const std::string &imagePath,
                                const std::string &pathToWrite)
-    : imageHandler(imagePath, pathToWrite), messageLengthThreshold(50),
+    : imageHandler(imagePath, pathToWrite), messageLengthThreshold(150),
       noThreads(3) {}
 
 ImageEncryptor::~ImageEncryptor() {}
@@ -117,6 +117,7 @@ void ImageEncryptor::encryptData(const std::string &message) {
   using namespace NsConstData;
   using namespace NsParallelEncoder;
   const size_t sz = message.size() * bitsInByte;
+  imageHandler.verifyMessageSize(sz);
   encodeMessageSize(sz, msgSizeStartPoint);
   if (message.length() < messageLengthThreshold) {
     encryptSingle(message, msgBodyStartPoint);
@@ -138,14 +139,15 @@ void ImageEncryptor::encodeMessageSize(const size_t message,
   using namespace NsConstData;
   const auto range = getMessageRange(message, startPoint);
   int index = 0;
-  char *bytes = toBytes(message);
-  auto putMessageBitIntoPixel = [&](unsigned char &byte) {
+  const std::byte *bytes = toBytes(message);
+  auto putMessageBitIntoPixel = [&](unsigned char &messageByte) {
     // get message byte value, current bit number and bit value
-    const unsigned char tmp = bytes[index / bitsInByte];
+    const int i = index / bitsInByte;
+    const std::byte tmp = bytes[i];
     const int bitNum = index % bitsInByte;
     const bool val = checkBit(tmp, bitNum);
-    byte = setFirstBit(byte, val);
-    index++;
+    messageByte = setFirstBit(messageByte, val);
+    ++index;
   };
   imageHandler.applyToEveryPixelInRangeRaw(putMessageBitIntoPixel,
                                            range.start(), range.end());

@@ -7,6 +7,7 @@
 #include <ParallelEncoder/ParallelEncoder.hpp>
 #include <ParallelEncoder/TaskDetail.hpp>
 #include <type_traits>
+#include <cstddef>
 
 namespace NsImageEncryptor {
 
@@ -40,10 +41,10 @@ class ImageEncryptor : public NsBitwiseOperations::BitwiseOperations {
     return Range(start, start + msgSizeInBits);
   }
 
-  template <typename T> char *toBytes(T data) {
-    T *ptr = static_cast<T *>(&data);
-    void *dataBuf = static_cast<void *>(ptr);
-    return static_cast<char *>(dataBuf);
+  template <typename T> const std::byte *toBytes(T &data) {
+    T *ptr = reinterpret_cast<T *>(&data);
+    const void *dataBuf = static_cast<const void *>(ptr);
+    return static_cast<const std::byte *>(dataBuf);
   }
 
   void encodeMessageSize(const size_t message, const int startPoint);
