@@ -112,17 +112,24 @@ void ImageEncryptor::encryptSingle(const std::string &message,
                                            range.start(), range.end());
 }
 
+void ImageEncryptor::encodeSteganoMarker() {
+  using namespace NsConstData;
+  encryptSingle(imageHandler.getSteganoMarker(), msgMarkerStartPoint);
+}
+
 void ImageEncryptor::encryptData(const std::string &message) {
 
   using namespace NsConstData;
   using namespace NsParallelEncoder;
   const size_t sz = message.size() * bitsInByte;
-  imageHandler.verifyMessageSize(sz);
-  encodeMessageSize(sz, msgSizeStartPoint);
+  const size_t markerSize = imageHandler.getSteganoMarkerSizeInBits();
+  imageHandler.verifyMessageSize(sz, markerSize);
+  encodeSteganoMarker();
+  encodeMessageSize(sz, markerSize);
   if (message.length() < messageLengthThreshold) {
-    encryptSingle(message, msgBodyStartPoint);
+    encryptSingle(message, msgSizeMarkerSizeInBits + markerSize);
   } else {
-    auto details = getTaskDetails(message, msgBodyStartPoint);
+    auto details = getTaskDetails(message, msgSizeMarkerSizeInBits + markerSize);
     NsTaskDetail::TaskDetail det(details.at(0));
     ParallelTask task(&ImageEncryptor::encryptMulti, this, det);
     std::vector<decltype(task)> tasks;

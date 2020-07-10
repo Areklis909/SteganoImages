@@ -2,7 +2,7 @@
 #define IMAGE_DECODER_CPP
 
 #include <ImageDecoder/ImageDecoder.hpp>
-#include <sstream>
+#include <NotSteganoException/NotSteganoException.hpp>
 
 namespace NsImageDecoder {
 
@@ -19,18 +19,22 @@ size_t ImageDecoder::getMessageSize() {
     const bool bitValue = checkFirstBit(byte);
     msgSize = setBit(msgSize, bitValue, index++);
   };
-  image.applyToEveryPixelInRangeRaw(readMsgSize, msgSizeStartPoint,
-                                    msgBodyStartPoint);
+  image.applyToEveryPixelInRangeRaw(readMsgSize, image.getSteganoMarkerSizeInBits(),
+                                    image.getSteganoMarkerSizeInBits() + msgSizeMarkerSizeInBits);
   return msgSize;
 }
 
 std::string ImageDecoder::readMessage() {
+  if(findSteganoMarker() == false) {
+    throw NsNotSteganoException::NotSteganoException();
+  }
   const size_t msgSize = getMessageSize();
   const std::string msg = getMessage(msgSize);
   return msg;
 }
 
-std::string ImageDecoder::getMessage(const size_t messageSize) {
+std::string ImageDecoder::getContent(const size_t start,
+                                     const size_t messageSize) {
   using namespace NsConstData;
 
   std::stringstream stream;
@@ -46,9 +50,20 @@ std::string ImageDecoder::getMessage(const size_t messageSize) {
     }
     ++index;
   };
-  image.applyToEveryPixelInRangeRaw(assembleTheMessage, msgBodyStartPoint,
-                                    msgBodyStartPoint + messageSize);
+  image.applyToEveryPixelInRangeRaw(assembleTheMessage, start,
+                                    start + messageSize);
   return stream.str();
+}
+
+bool ImageDecoder::findSteganoMarker() {
+  using namespace NsConstData;
+  const std::string marker = getContent(msgMarkerStartPoint, image.getSteganoMarkerSizeInBits());
+  return marker.compare(image.getSteganoMarker()) == 0;
+}
+
+std::string ImageDecoder::getMessage(const size_t messageSize) {
+  using namespace NsConstData;
+  return getContent(image.getSteganoMarkerSizeInBits() + msgSizeMarkerSizeInBits, messageSize);
 }
 
 } // namespace NsImageDecoder

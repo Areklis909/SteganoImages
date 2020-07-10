@@ -18,6 +18,8 @@ class ImageHandler {
 
   int numOfPixels;
   std::vector<cv::Mat> splitChannels;
+  const std::string steganoMarker;
+
 
   cv::Mat &getChannel(const int channelNumber);
   void checkImageProperties(const std::string &imagePath);
@@ -32,12 +34,14 @@ public:
   int rows() const;
   int cols() const;
   int getNumOfPixels() const;
+  const std::string & getSteganoMarker() const;
+  size_t getSteganoMarkerSizeInBits() const;
 
   cv::Mat &getRedChannel();
   cv::Mat &getGreenChannel();
   cv::Mat &getBlueChannel();
 
-  void verifyMessageSize(const size_t messageSize);
+  void verifyMessageSize(const size_t messageSize, const size_t markerSize);
 
   template <typename Procedure>
   void applyToEveryPixelGrayscale(Procedure procedure, const int start,

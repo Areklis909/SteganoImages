@@ -12,7 +12,8 @@ ImageHandler::ImageHandler(const std::string & imagePath, const std::string & pa
     pathToWrite(pathToWrite),
     redChannel(2),
     greenChannel(1),
-    blueChannel(0)
+    blueChannel(0),
+    steganoMarker("SteganoImages")
 {
     checkImageProperties(imagePath);
 }
@@ -21,7 +22,8 @@ ImageHandler::ImageHandler(const std::string & imagePath) : image(cv::imread(ima
     pathToWrite(""),
     redChannel(2),
     greenChannel(1),
-    blueChannel(0)
+    blueChannel(0),
+    steganoMarker("SteganoImages")
 {
     checkImageProperties(imagePath);
 }
@@ -56,6 +58,16 @@ int ImageHandler::cols() const {
     return image.cols;
 }
 
+const std::string & ImageHandler::getSteganoMarker() const {
+    return steganoMarker;
+}
+
+size_t ImageHandler::getSteganoMarkerSizeInBits() const {
+    using namespace NsConstData;
+    return steganoMarker.size() * bitsInByte;
+}
+
+
 cv::Mat & ImageHandler::getChannel(const int channelNumber) {
     if(splitChannels.empty() == true) {
         cv::split(image, splitChannels);
@@ -80,10 +92,10 @@ int ImageHandler::getNumOfPixels() const {
     return numOfPixels;
 }
 
-void ImageHandler::verifyMessageSize(const size_t messageSize) {
+void ImageHandler::verifyMessageSize(const size_t messageSize, const size_t markerSize) {
     using namespace NsConstData;
     using namespace NsMessageTooBigException;
-    const size_t maxSize = (cols() * rows()) - msgBodyStartPoint;
+    const size_t maxSize = (cols() * rows()) - msgSizeMarkerSizeInBits - markerSize;
     if(messageSize > maxSize) {
         throw MessageTooBigException();
     }

@@ -1,3 +1,6 @@
+#ifndef MESSAGE_TOO_BIG_EXC
+#define MESSAGE_TOO_BIG_EXC
+
 #include <MessageTooBigException/MessageTooBigException.hpp>
 
 namespace NsMessageTooBigException {
@@ -12,3 +15,5 @@ const char *MessageTooBigException::what() const noexcept {
 }
 
 } // namespace NsMessageTooBigException
+
+#endif

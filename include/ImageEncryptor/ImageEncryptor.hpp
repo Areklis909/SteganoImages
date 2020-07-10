@@ -48,6 +48,7 @@ class ImageEncryptor : public NsBitwiseOperations::BitwiseOperations {
   }
 
   void encodeMessageSize(const size_t message, const int startPoint);
+  void encodeSteganoMarker();
 
 public:
   ImageEncryptor(const std::string &imagePath, const std::string &pathToWrite);

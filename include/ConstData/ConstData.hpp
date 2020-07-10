@@ -7,8 +7,8 @@
 namespace NsConstData {
 
 const int bitsInByte = 8;
-const int msgSizeStartPoint = 0; // where size information starts
-const int msgBodyStartPoint =
+const int msgMarkerStartPoint = 0;
+const int msgSizeMarkerSizeInBits =
     sizeof(size_t) * bitsInByte; // where message starts
 
 } // namespace NsConstData
