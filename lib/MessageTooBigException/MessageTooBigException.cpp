@@ -10,7 +10,7 @@ MessageTooBigException::MessageTooBigException() {}
 MessageTooBigException::~MessageTooBigException() {}
 
 const char *MessageTooBigException::what() const noexcept {
-  const char *msg = "Supplied message size is too big!";
+  const char *msg = "Supplied message size is too big! \n";
   return msg;
 }
 
