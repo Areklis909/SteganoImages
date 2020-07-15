@@ -10,7 +10,6 @@ class ProcessingMode {
 
 public:
   ProcessingMode(const ProcessingModeType mode);
-  ~ProcessingMode();
 
   bool operator==(const ProcessingMode &other);
   std::string toString();

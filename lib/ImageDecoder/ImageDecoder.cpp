@@ -8,8 +8,6 @@ namespace NsImageDecoder {
 
 ImageDecoder::ImageDecoder(const std::string &imagePath) : image(imagePath) {}
 
-ImageDecoder::~ImageDecoder() {}
-
 size_t ImageDecoder::getMessageSize() {
   using namespace NsConstData;
 

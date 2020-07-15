@@ -13,7 +13,6 @@ class TaskDetail {
 
 public:
   TaskDetail(const std::string_view &submessage, const NsRange::Range &range);
-  ~TaskDetail();
   std::string_view getMessage() const;
   NsRange::Range getRange() const;
 };

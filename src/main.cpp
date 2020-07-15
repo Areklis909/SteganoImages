@@ -3,6 +3,7 @@
 #include <ImageEncryptor/ImageEncryptor.hpp>
 #include <MessageTooBigException/MessageTooBigException.hpp>
 #include <NotSteganoException/NotSteganoException.hpp>
+#include <ResultHandler/ResultHandler.hpp>
 
 void lippincott() {
   try {
@@ -13,7 +14,7 @@ void lippincott() {
     std::clog << mtbe.what();
   } catch (std::runtime_error &re) {
     std::clog << re.what();
-  } catch(std::exception & e) {
+  } catch (std::exception &e) {
     std::cerr << "Unknown exception occurred: " << e.what() << '\n';
   }
 }
@@ -33,8 +34,9 @@ int main(int argc, char **argv) {
     } else if (parser.getProcessingMode() ==
                ProcessingMode::fromString("decoding")) {
       NsImageDecoder::ImageDecoder decoder(input);
-      const std::string text = decoder.readMessage();
-      std::cout << text << '\n';
+      NsResultHandler::ResultHandler handler(
+          decoder.readMessage(), parser.getOutputMode(),
+          std::optional<std::string>(parser.getMessageFilePath()));
     } else {
       std::cout << "Wrong command line options!\n";
     }

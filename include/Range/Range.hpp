@@ -30,7 +30,6 @@ class Range {
 public:
   const std::pair<int, int> range;
   Range(const int start, const int end) : range(std::make_pair(start, end)){};
-  ~Range(){};
 
   int start() const { return range.first; }
 

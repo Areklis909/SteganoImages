@@ -7,7 +7,7 @@ namespace NsNotSteganoException {
 
 NotSteganoException::NotSteganoException() {}
 
-NotSteganoException::~NotSteganoException() {}
+// NotSteganoException::~NotSteganoException() {}
 
 const char *NotSteganoException::what() const noexcept {
   const char *msg = "This image was not stegano-processed before! \n";

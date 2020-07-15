@@ -14,8 +14,6 @@ ImageEncryptor::ImageEncryptor(const std::string &imagePath,
     : imageHandler(imagePath, pathToWrite), messageLengthThreshold(150),
       noThreads(3) {}
 
-ImageEncryptor::~ImageEncryptor() {}
-
 std::vector<NsRange::Range>
 ImageEncryptor::divideIntoRanges(const std::string &message, const int start) {
 

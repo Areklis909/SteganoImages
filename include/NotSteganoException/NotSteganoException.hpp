@@ -5,7 +5,6 @@ namespace NsNotSteganoException {
 class NotSteganoException : public std::exception {
 public:
   NotSteganoException();
-  ~NotSteganoException();
   virtual const char *what() const noexcept override;
   
 };

@@ -44,6 +44,15 @@ NsProcessingMode::ProcessingMode CommandLineParser::getProcessingMode() {
   return NsProcessingMode::ProcessingMode::fromString(mode);
 }
 
+NsOutputMode::OutputMode CommandLineParser::getOutputMode() {
+  const std::string msgFile = getOption<std::string>(messageFileStr);
+  if(msgFile.empty() == true) {
+    return NsOutputMode::OutputMode(NsOutputMode::OutputModeType::STDOUT);
+  } else {
+    return NsOutputMode::OutputMode(NsOutputMode::OutputModeType::FILE);
+  }
+}
+
 bool CommandLineParser::isInputImagePathSet() const {
   return isOptionSet<std::string>(inputImageStr);
 }

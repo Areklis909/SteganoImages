@@ -2,6 +2,7 @@
 #define COMMAND_LINE_PARSER_HPP
 
 #include <ProcessingMode/ProcessingMode.hpp>
+#include <OutputMode/OutputMode.hpp>
 #include <boost/program_options.hpp>
 #include <string>
 
@@ -21,6 +22,9 @@ class CommandLineParser {
   const char *modeStr = "mode";
 
   template <typename T> T getOption(const std::string &optionName) {
+    if(variablesMap.count(optionName) == 0) {
+      return T{};
+    }
     return variablesMap.at(optionName.data()).as<T>();
   }
 
@@ -40,6 +44,7 @@ public:
   std::string getMessageFilePath();
   std::string getMessage();
   NsProcessingMode::ProcessingMode getProcessingMode();
+  NsOutputMode::OutputMode getOutputMode();
 
   bool isInputImagePathSet() const;
   bool isOutputImagePathSet() const;

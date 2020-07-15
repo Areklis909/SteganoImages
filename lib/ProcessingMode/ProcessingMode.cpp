@@ -8,8 +8,6 @@ namespace NsProcessingMode {
 
 ProcessingMode::ProcessingMode(const ProcessingModeType mode) : mode(mode) {}
 
-ProcessingMode::~ProcessingMode() {}
-
 ProcessingMode ProcessingMode::fromString(const std::string &strMode) {
   if (encodingStr.compare(strMode) == 0) {
     return ProcessingMode(ProcessingModeType::ENCODING);

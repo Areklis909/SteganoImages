@@ -52,7 +52,7 @@ class ImageEncryptor : public NsBitwiseOperations::BitwiseOperations {
 
 public:
   ImageEncryptor(const std::string &imagePath, const std::string &pathToWrite);
-  ~ImageEncryptor();
+  // ~ImageEncryptor();
 
   void encryptData(const std::string &message);
 };
