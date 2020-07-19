@@ -1,0 +1,8 @@
+.git
+opencv-*
+README.md
+demo*
+*.jpg
+*.png
+*.JPG
+*.PGN

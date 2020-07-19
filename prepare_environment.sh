@@ -29,41 +29,41 @@ OPENCV_CONTRIB='NO'          # Install OpenCV's extra modules (YES/NO)
 
 # 1. KEEP UBUNTU OR DEBIAN UP TO DATE
 
-sudo apt-get -y update
-# sudo apt-get -y upgrade       # Uncomment to install new versions of packages currently installed
-# sudo apt-get -y dist-upgrade  # Uncomment to handle changing dependencies with new vers. of pack.
-# sudo apt-get -y autoremove    # Uncomment to remove packages that are now no longer needed
+apt-get -y update
+# apt-get -y upgrade       # Uncomment to install new versions of packages currently installed
+# apt-get -y dist-upgrade  # Uncomment to handle changing dependencies with new vers. of pack.
+# apt-get -y autoremove    # Uncomment to remove packages that are now no longer needed
 
 
 # 2. INSTALL THE DEPENDENCIES
 
 # Build tools:
-sudo apt-get install -y build-essential cmake
+apt-get install -y build-essential cmake
 
 # GUI (if you want GTK, change 'qt5-default' to 'libgtkglext1-dev' and remove '-DWITH_QT=ON'):
-sudo apt-get install -y qt5-default libvtk6-dev
+apt-get install -y qt5-default libvtk6-dev
 
 # Media I/O:
-sudo apt-get install -y zlib1g-dev libjpeg-dev libwebp-dev libpng-dev libtiff5-dev libjasper-dev \
+apt-get install -y zlib1g-dev libjpeg-dev libwebp-dev libpng-dev libtiff5-dev libjasper-dev \
                         libopenexr-dev libgdal-dev
 
 # Video I/O:
-sudo apt-get install -y libdc1394-22-dev libavcodec-dev libavformat-dev libswscale-dev \
+apt-get install -y libdc1394-22-dev libavcodec-dev libavformat-dev libswscale-dev \
                         libtheora-dev libvorbis-dev libxvidcore-dev libx264-dev yasm \
                         libopencore-amrnb-dev libopencore-amrwb-dev libv4l-dev libxine2-dev
 
 # Parallelism and linear algebra libraries:
-sudo apt-get install -y libtbb-dev libeigen3-dev
+apt-get install -y libtbb-dev libeigen3-dev
 
 # Python:
-sudo apt-get install -y python-dev  python-tk  pylint  python-numpy  \
+apt-get install -y python-dev  python-tk  pylint  python-numpy  \
                         python3-dev python3-tk pylint3 python3-numpy flake8
 
 # Java:
-sudo apt-get install -y ant default-jdk
+apt-get install -y ant default-jdk
 
 # Documentation and other:
-sudo apt-get install -y doxygen unzip wget
+apt-get install -y doxygen unzip wget
 
 
 # 3. INSTALL THE LIBRARY
@@ -95,6 +95,6 @@ cmake -DWITH_QT=OFF -DWITH_OPENGL=ON -DFORCE_VTK=ON -DWITH_TBB=ON -DWITH_GDAL=ON
 fi
 
 make -j8
-sudo make install
-sudo ldconfig
+make install
+ldconfig
 
