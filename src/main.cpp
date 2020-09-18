@@ -5,17 +5,27 @@
 #include <NotSteganoException/NotSteganoException.hpp>
 #include <ResultHandler/ResultHandler.hpp>
 
-void lippincott() {
+enum ErrorCodes {
+  NotStegano = 4,
+  MessageTooBig = 5,
+  General = 6
+};
+
+int lippincott() {
   try {
     throw;
   } catch (NsNotSteganoException::NotSteganoException &nse) {
-    std::clog << nse.what();
+    std::cout << nse.what();
+    return ErrorCodes::NotStegano;
   } catch (NsMessageTooBigException::MessageTooBigException &mtbe) {
-    std::clog << mtbe.what();
+    std::cout << mtbe.what();
+    return ErrorCodes::MessageTooBig;
   } catch (std::runtime_error &re) {
-    std::clog << re.what();
+    std::cout << re.what();
+    return ErrorCodes::General;
   } catch (std::exception &e) {
-    std::cerr << "Unknown exception occurred: " << e.what() << '\n';
+    std::cout << "Unknown exception occurred: " << e.what() << '\n';
+    return ErrorCodes::General;
   }
 }
 
@@ -41,7 +51,7 @@ int main(int argc, char **argv) {
       std::cout << "Wrong command line options!\n";
     }
   } catch (...) {
-    lippincott();
+    return lippincott();
   }
 
   return 0;
