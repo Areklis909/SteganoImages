@@ -60,7 +60,7 @@ apt-get install -y python-dev  python-tk  pylint  python-numpy  \
                         python3-dev python3-tk pylint3 python3-numpy flake8
 
 # Java:
-apt-get install -y ant default-jdk
+# apt-get install -y ant default-jdk
 
 # Documentation and other:
 apt-get install -y doxygen unzip wget
@@ -84,8 +84,9 @@ fi
 cd ${OPENCV} && mkdir build && cd build
 
 if [ $OPENCV_CONTRIB = 'NO' ]; then
-cmake -DWITH_QT=ON -DWITH_OPENGL=ON -DFORCE_VTK=ON -DWITH_TBB=ON -DWITH_GDAL=ON \
-      -DWITH_XINE=ON -DENABLE_PRECOMPILED_HEADERS=OFF ..
+# cmake -DWITH_QT=ON -DWITH_OPENGL=ON -DFORCE_VTK=ON -DWITH_TBB=ON -DWITH_GDAL=ON \
+#       -DWITH_XINE=ON -DENABLE_PRECOMPILED_HEADERS=OFF -DBUILD_SHARED_LIBS=OFF ..
+cmake -DBUILD_SHARED_LIBS=OFF ..
 fi
 
 if [ $OPENCV_CONTRIB = 'YES' ]; then

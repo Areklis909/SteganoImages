@@ -6,9 +6,10 @@
 #include <boost/program_options.hpp>
 #include <string>
 
-namespace po = boost::program_options;
 
 namespace NsSteganoCommandLineParser {
+
+namespace po = boost::program_options;
 
 class CommandLineParser {
   po::options_description optionsDescription;

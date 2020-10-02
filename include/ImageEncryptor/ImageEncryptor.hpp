@@ -14,8 +14,9 @@ namespace NsImageEncryptor {
 class ImageEncryptor : public NsBitwiseOperations::BitwiseOperations {
 
   NsImageHandler::ImageHandler imageHandler;
-  const size_t messageLengthThreshold;
-  const size_t noThreads;
+  const size_t messageLengthThreshold = 150;
+  const size_t noThreads = 3;
+  std::vector<std::future<void>> taskHandles;
 
   NsRange::Range getMessageRange(const std::string &message, const int start);
   void encryptMulti(const NsTaskDetail::TaskDetail taskDetail);
@@ -52,7 +53,7 @@ class ImageEncryptor : public NsBitwiseOperations::BitwiseOperations {
 
 public:
   ImageEncryptor(const std::string &imagePath, const std::string &pathToWrite);
-  // ~ImageEncryptor();
+  ~ImageEncryptor();
 
   void encryptData(const std::string &message);
 };

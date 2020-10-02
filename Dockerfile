@@ -1,18 +1,18 @@
-FROM httpd:2.4
 
-RUN apt-get -y update && apt-get -y install wget \
-    cmake python3 python3-pip unzip qt5-default \
+FROM areklis909/boost-docker:0.0.1 as boost
+FROM areklis909/opencv-docker:0.0.1
+
+RUN apt-get -y update \
+    && apt-get -y install ntp build-essential wget git curl zip unzip  \
     && rm -rf /var/lib/apt/lists/*
 
-ENV BOOST_DIR boost_1_67_0
+ENV BOOST_LIB_DIR  /usr/local/lib
+ENV TARGET_LIB_DIR /usr/lib/x86_64-linux-gnu
 
-ENV BOOST_ARCHIVE $BOOST_DIR.tar.gz
+RUN rm -rf /usr/include/boost/program_options/*
 
-RUN wget https://dl.bintray.com/boostorg/release/1.67.0/source/$BOOST_ARCHIVE \ 
-    && tar -zxvf $BOOST_ARCHIVE && cd $BOOST_DIR \
-    && ./bootstrap.sh --with-libraries=program_options && ./b2 install \
-    && cd ../ && rm -r $BOOST_DIR $BOOST_ARCHIVE
-
+COPY --from=boost ${BOOST_LIB_DIR}/libboost_program_options.* ${TARGET_LIB_DIR}/
+COPY --from=boost /usr/local/include/boost/program_options /usr/include/boost/program_options/
 
 ENV APP SteganoImages
 
@@ -20,15 +20,9 @@ RUN mkdir $APP
 
 COPY . $APP
 
-ENV OPENCV_SCRIPT prepare_environment.sh
-
 ENV BUILD_FOLDER build_stegano
 
-ENV SOURCE_CODE_FOLDER SteganoImages
-
-RUN cd $APP && sh $OPENCV_SCRIPT && rm -r opencv-* && cd ../ \
-    && mkdir $BUILD_FOLDER && cd $BUILD_FOLDER && cmake ../${SOURCE_CODE_FOLDER} \
-    && make
-
+RUN mkdir $BUILD_FOLDER && cd $BUILD_FOLDER && cmake ../${APP} \
+    && make && rm -rf ${APP}
 
 

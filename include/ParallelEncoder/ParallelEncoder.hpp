@@ -10,21 +10,23 @@ namespace NsParallelEncoder {
 
 template <typename Task> class ParallelEncoder {
 
-  std::vector<decltype(std::async(std::launch::async, std::declval<Task>()))>
-      futures;
-
+  Task taskPattern;
 public:
-  ParallelEncoder(const std::vector<Task> &tasks) {
-    for (const auto task : tasks) {
-      futures.push_back(std::async(std::launch::async, task));
-    }
-  };
+  ParallelEncoder(Task pattern) : taskPattern(pattern) {};
 
-  ~ParallelEncoder() {
-    for (auto &&fut : futures) {
-      fut.get();
+  template<typename Collection>
+  auto runTaskOverCollection(Collection && c) {
+
+    std::vector<std::future<void>> taskHandles;
+    for (const auto detail : c) {
+      taskHandles.push_back(
+        std::async(std::launch::async, [&, detail](){
+          taskPattern(detail);
+        })
+      );
     }
-  };
+    return taskHandles;
+  }
 };
 
 } // namespace NsParallelEncoder

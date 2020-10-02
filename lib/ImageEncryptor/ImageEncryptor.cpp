@@ -11,8 +11,15 @@ using namespace NsConstData;
 
 ImageEncryptor::ImageEncryptor(const std::string &imagePath,
                                const std::string &pathToWrite)
-    : imageHandler(imagePath, pathToWrite), messageLengthThreshold(150),
-      noThreads(3) {}
+    : imageHandler(imagePath, pathToWrite) {}
+
+ImageEncryptor::~ImageEncryptor() {
+  /*
+    Wait for the completion of encoding tasks
+  */
+  std::for_each(taskHandles.begin(), taskHandles.end(),
+                [](auto &&fut) { fut.get(); });
+}
 
 std::vector<NsRange::Range>
 ImageEncryptor::divideIntoRanges(const std::string &message, const int start) {
@@ -26,7 +33,7 @@ ImageEncryptor::divideIntoRanges(const std::string &message, const int start) {
   for (size_t i = 0; i < noThreads; ++i) {
     const int currentTaskSize =
         (i == (noThreads - 1)) ? taskSize + rest : taskSize;
-    ret.push_back(Range(startPoint, startPoint + currentTaskSize));
+    ret.emplace_back(startPoint, startPoint + currentTaskSize);
     startPoint = startPoint + currentTaskSize;
   }
   return ret;
@@ -52,13 +59,13 @@ ImageEncryptor::getTaskDetails(const std::string &message, const int start) {
   using NsRange::Range;
   using NsTaskDetail::TaskDetail;
   using namespace NsConstData;
+  const int startingPoint = 0;
 
   std::vector<TaskDetail> ret;
-  auto ranges = divideIntoRanges(message, 0);
+  auto ranges = divideIntoRanges(message, startingPoint);
   auto submessages = divideIntoSubmessages(message, ranges);
   for (const auto complet : zip(submessages, ranges)) {
-    ret.push_back(
-        TaskDetail(complet.first, (complet.second * bitsInByte + start)));
+    ret.emplace_back(complet.first, ((complet.second * bitsInByte) + start));
   }
   return ret;
 }
@@ -119,6 +126,8 @@ void ImageEncryptor::encryptData(const std::string &message) {
 
   using namespace NsConstData;
   using namespace NsParallelEncoder;
+  using namespace NsTaskDetail;
+
   const size_t sz = message.size() * bitsInByte;
   const size_t markerSize = imageHandler.getSteganoMarkerSizeInBits();
   imageHandler.verifyMessageSize(sz, markerSize);
@@ -127,15 +136,13 @@ void ImageEncryptor::encryptData(const std::string &message) {
   if (message.length() < messageLengthThreshold) {
     encryptSingle(message, msgSizeMarkerSizeInBits + markerSize);
   } else {
-    auto details = getTaskDetails(message, msgSizeMarkerSizeInBits + markerSize);
-    NsTaskDetail::TaskDetail det(details.at(0));
-    ParallelTask task(&ImageEncryptor::encryptMulti, this, det);
-    std::vector<decltype(task)> tasks;
-    for (size_t i = 0; i < noThreads; ++i) {
-      tasks.push_back(
-          ParallelTask(&ImageEncryptor::encryptMulti, this, details.at(i)));
-    }
-    ParallelEncoder parallelEncoder(tasks);
+    auto details =
+        getTaskDetails(message, msgSizeMarkerSizeInBits + markerSize);
+
+    auto taskPattern = [&](const TaskDetail &detail) { encryptMulti(detail); };
+
+    ParallelEncoder encoder(taskPattern);
+    taskHandles = std::move(encoder.runTaskOverCollection(details));
   }
 }
 
