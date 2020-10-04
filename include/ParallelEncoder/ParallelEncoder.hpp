@@ -1,7 +1,6 @@
 #ifndef PARALLEL_ENCODER_HPP
 #define PARALLEL_ENCODER_HPP
 
-#include "ParallelTask.hpp"
 #include <ConstData/ConstData.hpp>
 #include <ImageHandler/ImageHandler.hpp>
 #include <future>
