@@ -138,11 +138,9 @@ void ImageEncryptor::encryptData(const std::string &message) {
   } else {
     auto details =
         getTaskDetails(message, msgSizeMarkerSizeInBits + markerSize);
-
     auto taskPattern = [&](const TaskDetail &detail) { encryptMulti(detail); };
-
     ParallelEncoder encoder(taskPattern);
-    taskHandles = std::move(encoder.runTaskOverCollection(details));
+    taskHandles = encoder.runTaskOverCollection(details);
   }
 }
 
