@@ -23,6 +23,6 @@ COPY . $APP
 ENV BUILD_FOLDER build_stegano
 
 RUN mkdir $BUILD_FOLDER && cd $BUILD_FOLDER && cmake ../${APP} \
-    && make && rm -rf ${APP}
+    && make && rm -rf ${APP} && rm -r ../SteganoImages 
 
 
