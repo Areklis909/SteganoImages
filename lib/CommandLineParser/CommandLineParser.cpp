@@ -17,7 +17,7 @@ CommandLineParser::CommandLineParser() : optionsDescription("Allowed options") {
       modeStr, po::value<std::string>(), "ProcessingMode: [encoding|decoding]");
 }
 
-void CommandLineParser::parseCommandLine(int argc, char **argv) {
+void CommandLineParser::parseCommandLine(const int argc, const char **argv) {
   po::store(po::parse_command_line(argc, argv, optionsDescription),
             variablesMap);
   po::notify(variablesMap);

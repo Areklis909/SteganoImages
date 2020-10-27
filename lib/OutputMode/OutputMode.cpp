@@ -11,7 +11,7 @@ OutputMode::OutputMode(const OutputModeType type)
 
 // OutputMode::~OutputMode() {}
 
-bool OutputMode::operator==(const OutputMode &other) {
+bool OutputMode::operator==(const OutputMode &other) const {
   return other.mode == mode;
 }
 

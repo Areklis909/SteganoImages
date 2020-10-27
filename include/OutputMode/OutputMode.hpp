@@ -15,7 +15,8 @@ public:
   static const std::string fileStr;
   static const std::string stdoutStr;
 
-  bool operator==(const OutputMode &other);
+  bool operator==(const OutputMode &other) const;
+  
   std::string toString();
   static OutputMode fromString(const std::string &strMode);
 };

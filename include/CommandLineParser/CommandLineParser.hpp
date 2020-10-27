@@ -38,7 +38,7 @@ class CommandLineParser {
 
 public:
   CommandLineParser();
-  void parseCommandLine(int argc, char **argv);
+  void parseCommandLine(const int argc, const char **argv);
 
   std::string getInputImagePath();
   std::string getOutputImagePath();

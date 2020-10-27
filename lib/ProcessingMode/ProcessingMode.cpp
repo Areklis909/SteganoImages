@@ -38,7 +38,11 @@ std::string ProcessingMode::toString() {
   return ret;
 }
 
-bool ProcessingMode::operator==(const ProcessingMode &other) {
+bool ProcessingMode::operator==(const ProcessingMode &other) const {
+  return other.mode == mode;
+}
+
+bool ProcessingMode::operator==(ProcessingMode && other) const {
   return other.mode == mode;
 }
 

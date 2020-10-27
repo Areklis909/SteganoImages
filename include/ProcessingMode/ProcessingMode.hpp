@@ -11,7 +11,9 @@ class ProcessingMode {
 public:
   ProcessingMode(const ProcessingModeType mode);
 
-  bool operator==(const ProcessingMode &other);
+  bool operator==(const ProcessingMode &other) const;
+  bool operator==(ProcessingMode && other) const;
+
   std::string toString();
   static ProcessingMode fromString(const std::string &strMode);
 
