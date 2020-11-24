@@ -8,12 +8,15 @@
 #include <ParallelEncoder/TaskDetail.hpp>
 #include <type_traits>
 #include <cstddef>
+#include <memory>
 
 namespace NsImageEncryptor {
 
 class ImageEncryptor : public NsBitwiseOperations::BitwiseOperations {
 
-  NsImageHandler::ImageHandler imageHandler;
+  // NsImageHandler::ImageHandler imageHandler;
+  std::unique_ptr<NsImageHandler::ImageHandlerInterface> imageHandler;
+
   const size_t messageLengthThreshold = 150;
   const size_t noThreads = 3;
   std::vector<std::future<void>> taskHandles;
@@ -35,7 +38,7 @@ class ImageEncryptor : public NsBitwiseOperations::BitwiseOperations {
     using namespace NsConstData;
 
     const int msgSizeInBits = sizeof(message) * bitsInByte;
-    const int allPixels = imageHandler.getNumOfPixels();
+    const int allPixels = imageHandler->getNumOfPixels();
     if (msgSizeInBits > allPixels) {
       throw std::runtime_error("Message is too big!");
     }
@@ -52,7 +55,8 @@ class ImageEncryptor : public NsBitwiseOperations::BitwiseOperations {
   void encodeSteganoMarker();
 
 public:
-  ImageEncryptor(const std::string &imagePath, const std::string &pathToWrite);
+  // ImageEncryptor(const std::string &imagePath, const std::string &pathToWrite);
+  ImageEncryptor(std::unique_ptr<NsImageHandler::ImageHandlerInterface> handler);
   ~ImageEncryptor();
 
   void encryptData(const std::string &message);

@@ -3,8 +3,13 @@
 
 #include <Range/Range.hpp>
 #include <string_view>
+#include <vector>
 
 namespace NsTaskDetail {
+
+/*
+  TaskDetail
+*/
 
 class TaskDetail {
 
@@ -15,6 +20,29 @@ public:
   TaskDetail(const std::string_view &submessage, const NsRange::Range &range);
   std::string_view getMessage() const;
   NsRange::Range getRange() const;
+};
+
+/*
+  TaskDetailManager
+*/
+
+class TaskDetailManager {
+public:
+  TaskDetailManager(const size_t maxThreads);
+  ~TaskDetailManager() = default;
+
+  std::vector<NsTaskDetail::TaskDetail>
+  getTaskDetails(const std::string &message, const int start);
+
+private:
+  const size_t noThreads;
+  
+  std::vector<std::string_view>
+  divideIntoSubmessages(const std::string &message,
+                        const std::vector<NsRange::Range> &ranges);
+
+  std::vector<NsRange::Range> divideIntoRanges(const std::string &message,
+                                               const int start);
 };
 
 } // namespace NsTaskDetail

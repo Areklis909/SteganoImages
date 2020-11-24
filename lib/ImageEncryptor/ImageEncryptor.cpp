@@ -4,14 +4,13 @@
 #include <ImageEncryptor/ImageEncryptor.hpp>
 #include <tuple>
 #include <utility>
+#include <algorithm>
 
 namespace NsImageEncryptor {
 
 using namespace NsConstData;
 
-ImageEncryptor::ImageEncryptor(const std::string &imagePath,
-                               const std::string &pathToWrite)
-    : imageHandler(imagePath, pathToWrite) {}
+ImageEncryptor::ImageEncryptor(std::unique_ptr<NsImageHandler::ImageHandlerInterface> ptr) : imageHandler(std::move(ptr)) {}
 
 ImageEncryptor::~ImageEncryptor() {
   /*
@@ -71,20 +70,19 @@ ImageEncryptor::getTaskDetails(const std::string &message, const int start) {
 }
 
 void ImageEncryptor::encryptMulti(const NsTaskDetail::TaskDetail taskDetail) {
-  using namespace NsConstData;
-  const auto range = taskDetail.getRange();
-  const auto message = taskDetail.getMessage();
-  int index = 0;
-  auto putMessageBitIntoPixel = [&](unsigned char &byte) {
-    // get message byte value, current bit number and bit value
-    const unsigned char tmp = message.at(index / bitsInByte);
-    const int bitNum = index % bitsInByte;
-    const bool val = checkBit(tmp, bitNum);
-    byte = setFirstBit(byte, val);
-    ++index;
-  };
-  imageHandler.applyToEveryPixelInRangeRaw(putMessageBitIntoPixel,
-                                           range.start(), range.end());
+  // using namespace NsConstData;
+  // const auto range = taskDetail.getRange();
+  // const auto message = taskDetail.getMessage();
+  // int index = 0;
+  // auto putMessageBitIntoPixel = [&](unsigned char &byte) {
+  //   // get message byte value, current bit number and bit value
+  //   const unsigned char tmp = message.at(index / bitsInByte);
+  //   const int bitNum = index % bitsInByte;
+  //   const bool val = checkBit(tmp, bitNum);
+  //   byte = setFirstBit(byte, val);
+  //   ++index;
+  // };
+  // imageHandler->applyToEveryPixelInRangeRaw(range.start(), range.end());
 }
 
 NsRange::Range ImageEncryptor::getMessageRange(const std::string &message,
@@ -92,7 +90,7 @@ NsRange::Range ImageEncryptor::getMessageRange(const std::string &message,
   using NsRange::Range;
 
   const int msgSizeInBits = message.size() * bitsInByte;
-  const int allPixels = imageHandler.getNumOfPixels();
+  const int allPixels = imageHandler->getNumOfPixels();
   if (msgSizeInBits > allPixels) {
     throw std::runtime_error("Message is too big!");
   }
@@ -102,24 +100,23 @@ NsRange::Range ImageEncryptor::getMessageRange(const std::string &message,
 void ImageEncryptor::encryptSingle(const std::string &message,
                                    const int startPoint) {
 
-  using namespace NsConstData;
-  const auto range = getMessageRange(message, startPoint);
-  int index = 0;
-  auto putMessageBitIntoPixel = [&](unsigned char &byte) {
-    // get message byte value, current bit number and bit value
-    const unsigned char tmp = message.at(index / bitsInByte);
-    const int bitNum = index % bitsInByte;
-    const bool val = checkBit(tmp, bitNum);
-    byte = setFirstBit(byte, val);
-    ++index;
-  };
-  imageHandler.applyToEveryPixelInRangeRaw(putMessageBitIntoPixel,
-                                           range.start(), range.end());
+  // using namespace NsConstData;
+  // const auto range = getMessageRange(message, startPoint);
+  // int index = 0;
+  // auto putMessageBitIntoPixel = [&](unsigned char &byte) {
+  //   // get message byte value, current bit number and bit value
+  //   const unsigned char tmp = message.at(index / bitsInByte);
+  //   const int bitNum = index % bitsInByte;
+  //   const bool val = checkBit(tmp, bitNum);
+  //   byte = setFirstBit(byte, val);
+  //   ++index;
+  // };
+  // imageHandler->applyToEveryPixelInRangeRaw(range.start(), range.end());
 }
 
 void ImageEncryptor::encodeSteganoMarker() {
   using namespace NsConstData;
-  encryptSingle(imageHandler.getSteganoMarker(), msgMarkerStartPoint);
+  encryptSingle(imageHandler->getSteganoMarker(), msgMarkerStartPoint);
 }
 
 void ImageEncryptor::encryptData(const std::string &message) {
@@ -129,8 +126,8 @@ void ImageEncryptor::encryptData(const std::string &message) {
   using namespace NsTaskDetail;
 
   const size_t sz = message.size() * bitsInByte;
-  const size_t markerSize = imageHandler.getSteganoMarkerSizeInBits();
-  imageHandler.verifyMessageSize(sz, markerSize);
+  const size_t markerSize = imageHandler->getSteganoMarkerSizeInBits();
+  imageHandler->verifyMessageSize(sz, markerSize);
   encodeSteganoMarker();
   encodeMessageSize(sz, markerSize);
   if (message.length() < messageLengthThreshold) {
@@ -146,21 +143,20 @@ void ImageEncryptor::encryptData(const std::string &message) {
 
 void ImageEncryptor::encodeMessageSize(const size_t message,
                                        const int startPoint) {
-  using namespace NsConstData;
-  const auto range = getMessageRange(message, startPoint);
-  int index = 0;
-  const std::byte *bytes = toBytes(message);
-  auto putMessageBitIntoPixel = [&](unsigned char &messageByte) {
-    // get message byte value, current bit number and bit value
-    const int i = index / bitsInByte;
-    const std::byte tmp = bytes[i];
-    const int bitNum = index % bitsInByte;
-    const bool val = checkBit(tmp, bitNum);
-    messageByte = setFirstBit(messageByte, val);
-    ++index;
-  };
-  imageHandler.applyToEveryPixelInRangeRaw(putMessageBitIntoPixel,
-                                           range.start(), range.end());
+  // using namespace NsConstData;
+  // const auto range = getMessageRange(message, startPoint);
+  // int index = 0;
+  // const std::byte *bytes = toBytes(message);
+  // auto putMessageBitIntoPixel = [&](unsigned char &messageByte) {
+  //   // get message byte value, current bit number and bit value
+  //   const int i = index / bitsInByte;
+  //   const std::byte tmp = bytes[i];
+  //   const int bitNum = index % bitsInByte;
+  //   const bool val = checkBit(tmp, bitNum);
+  //   messageByte = setFirstBit(messageByte, val);
+  //   ++index;
+  // };
+  // imageHandler->applyToEveryPixelInRangeRaw(range.start(), range.end());
 }
 
 } // namespace NsImageEncryptor

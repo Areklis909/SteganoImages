@@ -12,13 +12,13 @@ size_t ImageDecoder::getMessageSize() {
   using namespace NsConstData;
 
   size_t msgSize{0};
-  int32_t index{0};
-  auto readMsgSize = [&](const unsigned char byte) {
-    const bool bitValue = checkFirstBit(byte);
-    msgSize = setBit(msgSize, bitValue, index++);
-  };
-  image.applyToEveryPixelInRangeRaw(readMsgSize, image.getSteganoMarkerSizeInBits(),
-                                    image.getSteganoMarkerSizeInBits() + msgSizeMarkerSizeInBits);
+  // int32_t index{0};
+  // auto readMsgSize = [&](const unsigned char byte) {
+  //   const bool bitValue = checkFirstBit(byte);
+  //   msgSize = setBit(msgSize, bitValue, index++);
+  // };
+  // image.applyToEveryPixelInRangeRaw(image.getSteganoMarkerSizeInBits(),
+  //                                   image.getSteganoMarkerSizeInBits() + msgSizeMarkerSizeInBits);
   return msgSize;
 }
 
@@ -33,23 +33,23 @@ std::string ImageDecoder::readMessage() {
 
 std::string ImageDecoder::getContent(const size_t start,
                                      const size_t messageSize) {
-  using namespace NsConstData;
+  // using namespace NsConstData;
 
   std::stringstream stream;
-  unsigned char currentCharacter{0};
-  int32_t index{0};
-  auto assembleTheMessage = [&](const unsigned char byte) {
-    const int bitNum = index % bitsInByte;
-    const bool bitValue = checkFirstBit(byte);
-    currentCharacter = setBit(currentCharacter, bitValue, bitNum);
-    if (bitNum == bitsInByte - 1) {
-      stream << currentCharacter;
-      currentCharacter = 0;
-    }
-    ++index;
-  };
-  image.applyToEveryPixelInRangeRaw(assembleTheMessage, start,
-                                    start + messageSize);
+  // unsigned char currentCharacter{0};
+  // int32_t index{0};
+  // auto assembleTheMessage = [&](const unsigned char byte) {
+  //   const int bitNum = index % bitsInByte;
+  //   const bool bitValue = checkFirstBit(byte);
+  //   currentCharacter = setBit(currentCharacter, bitValue, bitNum);
+  //   if (bitNum == bitsInByte - 1) {
+  //     stream << currentCharacter;
+  //     currentCharacter = 0;
+  //   }
+  //   ++index;
+  // };
+  // image.applyToEveryPixelInRangeRaw(start,
+  //                                   start + messageSize);
   return stream.str();
 }
 

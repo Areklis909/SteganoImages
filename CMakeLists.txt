@@ -49,5 +49,4 @@ set_target_properties(boost_program_options PROPERTIES IMPORTED_LOCATION ${boost
 
 add_subdirectory(lib)
 add_subdirectory(src)
-# add_subdirectory(external/googletest)
-add_subdirectory(test)
+#add_subdirectory(test)

@@ -6,7 +6,7 @@ include_directories(${CMAKE_SOURCE_DIR}/include)
 
 project(${TARGET} VERSION 1.0.1)
 
-add_library(${TARGET} ImageEncryptor.cpp)
+add_library(${TARGET} ImageEncryptorInterface.cpp ImageEncryptorFactory.cpp MultiImageEncryptor.cpp SingleImageEncryptor.cpp ImageEncryptorManager.cpp)
 
 target_link_libraries(${TARGET}
-    ImageHandler ParallelEncoder)
+    ImageHandler ParallelEncoder Utils)

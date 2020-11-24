@@ -18,7 +18,6 @@ class ImageDecoder : public NsBitwiseOperations::BitwiseOperations {
   std::string getContent(const size_t start, const size_t messageSize);
 public:
   ImageDecoder(const std::string &imagePath);
-  // ~ImageDecoder();
 
   std::string readMessage();
 };
