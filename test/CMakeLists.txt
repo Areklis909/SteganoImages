@@ -6,6 +6,6 @@ add_executable(${BINARY} ${TEST_SOURCES})
 
 add_test(NAME ${BINARY} COMMAND ${BINARY})
 
-set(LIBS CommandLineParser ImageEncryptor)
+set(LIBS CommandLineParser ImageEncryptor ImageHandler gtest gmock)
 
-target_link_libraries(${BINARY} PUBLIC ${LIBS} gtest)
+target_link_libraries(${BINARY} PUBLIC ${LIBS})
