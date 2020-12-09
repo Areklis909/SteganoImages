@@ -10,11 +10,11 @@ namespace NsTaskDetail {
     TaskDetail
 */
 
-TaskDetail::TaskDetail(const std::string_view &submessage,
+TaskDetail::TaskDetail(const std::string &submessage,
                        const NsRange::Range &range)
     : submessage(submessage), range(range) {}
 
-std::string_view TaskDetail::getMessage() const { return submessage; }
+std::string TaskDetail::getMessage() const { return submessage; }
 NsRange::Range TaskDetail::getRange() const { return range; }
 
 /*
@@ -24,14 +24,14 @@ NsRange::Range TaskDetail::getRange() const { return range; }
 TaskDetailManager::TaskDetailManager(const size_t maxThreads)
     : noThreads(maxThreads) {}
 
-std::vector<std::string_view> TaskDetailManager::divideIntoSubmessages(
+std::vector<std::string> TaskDetailManager::divideIntoSubmessages(
     const std::string &message, const std::vector<NsRange::Range> &ranges) {
-  std::vector<std::string_view> submessages;
+  std::vector<std::string> submessages;
   submessages.reserve(ranges.size());
   std::transform(ranges.begin(), ranges.end(), std::back_inserter(submessages),
                  [&](auto &range) {
                    const int length = range.end() - range.start();
-                   return std::string_view(message.c_str() + range.start(),
+                   return std::string(message.c_str() + range.start(),
                                            length);
                  });
   return submessages;
@@ -66,7 +66,7 @@ TaskDetailManager::getTaskDetails(const std::string &message, const int start) {
   auto ranges = divideIntoRanges(message, startingPoint);
   auto submessages = divideIntoSubmessages(message, ranges);
   for (const auto complet : zip(submessages, ranges)) {
-    ret.emplace_back(complet.first, ((complet.second * bitsInByte) + start));
+    ret.emplace_back(complet.first, ((complet.second * ConstData::instance().bitsInByte()) + start));
   }
   return ret;
 }

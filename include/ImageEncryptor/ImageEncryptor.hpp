@@ -37,7 +37,7 @@ class ImageEncryptor : public NsBitwiseOperations::BitwiseOperations {
     using NsRange::Range;
     using namespace NsConstData;
 
-    const int msgSizeInBits = sizeof(message) * bitsInByte;
+    const int msgSizeInBits = sizeof(message) * ConstData::instance().bitsInByte();
     const int allPixels = imageHandler->getNumOfPixels();
     if (msgSizeInBits > allPixels) {
       throw std::runtime_error("Message is too big!");

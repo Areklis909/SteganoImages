@@ -57,14 +57,13 @@ ImageEncryptor::getTaskDetails(const std::string &message, const int start) {
 
   using NsRange::Range;
   using NsTaskDetail::TaskDetail;
-  using namespace NsConstData;
   const int startingPoint = 0;
 
   std::vector<TaskDetail> ret;
   auto ranges = divideIntoRanges(message, startingPoint);
   auto submessages = divideIntoSubmessages(message, ranges);
   for (const auto complet : zip(submessages, ranges)) {
-    ret.emplace_back(complet.first, ((complet.second * bitsInByte) + start));
+    ret.emplace_back(complet.first, ((complet.second * ConstData::instance().bitsInByte()) + start));
   }
   return ret;
 }
@@ -89,8 +88,8 @@ NsRange::Range ImageEncryptor::getMessageRange(const std::string &message,
                                                const int start) {
   using NsRange::Range;
 
-  const int msgSizeInBits = message.size() * bitsInByte;
-  const int allPixels = imageHandler->getNumOfPixels();
+  const int msgSizeInBits = message.size() * ConstData::instance().bitsInByte();
+  const int allPixels = imageHandler->getNumOfPixels();)
   if (msgSizeInBits > allPixels) {
     throw std::runtime_error("Message is too big!");
   }
@@ -116,7 +115,7 @@ void ImageEncryptor::encryptSingle(const std::string &message,
 
 void ImageEncryptor::encodeSteganoMarker() {
   using namespace NsConstData;
-  encryptSingle(imageHandler->getSteganoMarker(), msgMarkerStartPoint);
+  encryptSingle(imageHandler->getSteganoMarker(), ConstData::instance().msgMarkerStartPoint());
 }
 
 void ImageEncryptor::encryptData(const std::string &message) {
@@ -125,16 +124,16 @@ void ImageEncryptor::encryptData(const std::string &message) {
   using namespace NsParallelEncoder;
   using namespace NsTaskDetail;
 
-  const size_t sz = message.size() * bitsInByte;
+  const size_t sz = message.size() * ConstData::instance().bitsInByte();
   const size_t markerSize = imageHandler->getSteganoMarkerSizeInBits();
   imageHandler->verifyMessageSize(sz, markerSize);
   encodeSteganoMarker();
   encodeMessageSize(sz, markerSize);
   if (message.length() < messageLengthThreshold) {
-    encryptSingle(message, msgSizeMarkerSizeInBits + markerSize);
+    encryptSingle(message, ConstData::instance().msgSizeMarkerSizeInBits() + markerSize);
   } else {
     auto details =
-        getTaskDetails(message, msgSizeMarkerSizeInBits + markerSize);
+        getTaskDetails(message, ConstData::instance().msgSizeMarkerSizeInBits() + markerSize);
     auto taskPattern = [&](const TaskDetail &detail) { encryptMulti(detail); };
     ParallelEncoder encoder(taskPattern);
     taskHandles = encoder.runTaskOverCollection(details);

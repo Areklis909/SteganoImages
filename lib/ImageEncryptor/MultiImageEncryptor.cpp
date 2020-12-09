@@ -15,7 +15,7 @@ MultiImageEncryptor::~MultiImageEncryptor() {
 
 void MultiImageEncryptor::encryptionWorker(const NsTaskDetail::TaskDetail &detail) {
   auto range = detail.getRange();
-  handler->applyToEveryPixelInRangeRaw(std::make_unique<NsPixelStrategy::EncryptPixel<std::string_view>>(detail.getMessage()), range.start(), range.end());
+  handler->applyToEveryPixelInRangeRaw(strategy, range.start(), range.end());
 }
 
 void MultiImageEncryptor::encryptData(const std::string &message) {
@@ -25,7 +25,7 @@ void MultiImageEncryptor::encryptData(const std::string &message) {
 
   TaskDetailManager taskMgr(noThreads);
 
-  auto details = taskMgr.getTaskDetails(message, msgSizeMarkerSizeInBits + handler->getSteganoMarkerSizeInBits());
+  auto details = taskMgr.getTaskDetails(message, ConstData::instance().msgSizeMarkerSizeInBits() + ConstData::instance().getSteganoMarkerSizeInBits());
   auto taskPattern = [&](const TaskDetail &detail) { encryptionWorker(detail); };
   ParallelEncoder encoder(taskPattern);
   taskHandles = encoder.runTaskOverCollection(details);

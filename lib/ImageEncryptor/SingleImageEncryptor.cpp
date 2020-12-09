@@ -1,5 +1,5 @@
 #include <ImageEncryptor/SingleImageEncryptor.hpp>
-#include <PixelStrategy/EncryptPixel.hpp>
+#include <PixelStrategy/PixelStrategy.hpp>
 
 namespace NsImageEncryptor {
 
@@ -9,11 +9,12 @@ SingleImageEncryptor::SingleImageEncryptor(
 
 void SingleImageEncryptor::encryptData(const std::string &message) {
   using namespace NsConstData;
+  strategy->setMessage(message);
   NsRange::RangeFactory rangeFactory(handler->getNumOfPixels());
-  auto range = rangeFactory.getRange(message, msgSizeMarkerSizeInBits + handler->getSteganoMarkerSizeInBits());
-  handler->applyToEveryPixelInRangeRaw(
-      std::make_unique<NsPixelStrategy::EncryptPixel<std::string>>(message), range.start(),
-      range.end());
+  auto range = rangeFactory.getRange(
+      message, ConstData::instance().msgSizeMarkerSizeInBits() +
+                   ConstData::instance().getSteganoMarkerSizeInBits());
+  handler->applyToEveryPixelInRangeRaw(strategy, range.start(), range.end());
 }
 
 } // namespace NsImageEncryptor

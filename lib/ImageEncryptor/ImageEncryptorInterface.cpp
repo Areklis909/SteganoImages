@@ -1,14 +1,20 @@
-#ifndef IMAGE_ENCRYPTOR_INTERFACE_CPP
-#define IMAGE_ENCRYPTOR_INTERFACE_CPP
+#ifndef IMAGE_ENCRYPTOR_INTERFACE_TEST_CPP
+#define IMAGE_ENCRYPTOR_INTERFACE_TEST_CPP
 
 #include <ConstData/ConstData.hpp>
 #include <ImageEncryptor/ImageEncryptorInterface.hpp>
 #include <MessageSizeFinder/MessageSizeFinder.hpp>
+#include <PixelStrategy/WriteStrategy.hpp>
 #include <SimpleConverter/SimpleConverter.hpp>
 #include <Utils/Utils.hpp>
-#include <PixelStrategy/EncryptPixel.hpp>
+#include <utility>
 
 namespace NsImageEncryptor {
+
+void ImageEncryptorInterface::setStrategy(
+    std::shared_ptr<NsPixelStrategy::WriteStrategy> s) {
+  strategy = s;
+}
 
 void ImageEncryptorInterface::encryptMarker() {
   /*
@@ -16,12 +22,11 @@ void ImageEncryptorInterface::encryptMarker() {
   */
   using namespace NsConstData;
 
-  const auto marker = handler->getSteganoMarker();
+  const std::string marker(ConstData::instance().steganoMarker());
+  strategy->setMessage(marker);
   NsRange::RangeFactory rangeFactory(handler->getNumOfPixels());
-  auto range = rangeFactory.getRange(marker, msgMarkerStartPoint);
-  handler->applyToEveryPixelInRangeRaw(
-      std::make_unique<NsPixelStrategy::EncryptPixel<std::string>>(marker), range.start(),
-      range.end());
+  auto range = rangeFactory.getRange(marker, ConstData::instance().msgMarkerStartPoint());
+  handler->applyToEveryPixelInRangeRaw(strategy, range.start(), range.end());
 }
 
 void ImageEncryptorInterface::encryptSize(const size_t size) {
@@ -32,21 +37,22 @@ void ImageEncryptorInterface::encryptSize(const size_t size) {
     Example:
       size = 324, then string representation: 00000324
   */
-  const size_t numberOfZeros = NsConstData::msgSizeSize - NsUtils::digits(size);
+  using namespace NsConstData;
+  const size_t numberOfZeros = ConstData::instance().msgSizeSize() - NsUtils::digits(size);
   if (numberOfZeros < 0) {
     throw std::runtime_error("The message is too big!");
   }
   std::string temp(numberOfZeros, 0);
 
   NsSimpleConverter::SimpleConverter converter;
-  auto sizeStr = temp + converter.toString(size);
+  const auto sizeStr = temp + converter.toString(size);
+  strategy->setMessage(sizeStr);
 
   NsRange::RangeFactory rangeFactory(handler->getNumOfPixels());
-  auto range = rangeFactory.getRange(sizeStr, handler->getSteganoMarkerSizeInBits());
+  auto range =
+      rangeFactory.getRange(sizeStr, ConstData::instance().getSteganoMarkerSizeInBits());
 
-  handler->applyToEveryPixelInRangeRaw(
-      std::make_unique<NsPixelStrategy::EncryptPixel<std::string>>(sizeStr), range.start(),
-      range.end());
+  handler->applyToEveryPixelInRangeRaw(strategy, range.start(), range.end());
 }
 
 void ImageEncryptorInterface::encrypt(const std::string &message) {
@@ -55,6 +61,6 @@ void ImageEncryptorInterface::encrypt(const std::string &message) {
   encryptData(message);
 }
 
-} // namespace ImageEncryptorInterface
+} // namespace NsImageEncryptor
 
 #endif

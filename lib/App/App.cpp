@@ -1,13 +1,10 @@
 #include <App/App.hpp>
 #include <CommandLineParser/CommandLineParser.hpp>
 #include <ImageDecoder/ImageDecoder.hpp>
-#include <ImageEncryptor/ImageEncryptorFactory.hpp>
-#include <ImageEncryptor/ImageEncryptorInterface.hpp>
 #include <ImageEncryptor/ImageEncryptorManager.hpp>
-#include <ImageHandler/ImageHandler.hpp>
 #include <MessageTooBigException/MessageTooBigException.hpp>
 #include <NotSteganoException/NotSteganoException.hpp>
-#include <ResultHandler/ResultHandler.hpp>
+#include <ImageHandler/ImageHandler.hpp>
 #include <iostream>
 
 namespace NsApp {

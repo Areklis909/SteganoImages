@@ -4,6 +4,7 @@
 #include <opencv2/opencv.hpp>
 #include <string>
 #include <vector>
+#include <memory>
 #include "ImageHandlerInterface.hpp"
 
 namespace NsImageHandler {
@@ -26,10 +27,10 @@ public:
   int rows() const override;
   int cols() const override;
   int getNumOfPixels() const override;
-  const std::string & getSteganoMarker() const override;
-  size_t getSteganoMarkerSizeInBits() const override;
+  // const std::string & getSteganoMarker() const override;
+  // size_t getSteganoMarkerSizeInBits() const override;
   void verifyMessageSize(const size_t messageSize, const size_t markerSize) override;
-  void applyToEveryPixelInRangeRaw(std::unique_ptr<NsPixelStrategy::PixelStrategy> op, const int start, const int end) override;
+  void applyToEveryPixelInRangeRaw(std::shared_ptr<NsPixelStrategy::PixelStrategy> op, const int start, const int end) override;
 };
 
 } // namespace NsImageHandler

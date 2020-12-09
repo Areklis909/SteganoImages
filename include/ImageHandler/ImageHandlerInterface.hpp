@@ -19,9 +19,7 @@ public:
     virtual int cols() const = 0;
     virtual int getNumOfPixels() const = 0;
     virtual void verifyMessageSize(const size_t messageSize, const size_t markerSize) = 0;
-    virtual const std::string & getSteganoMarker() const = 0;
-    virtual size_t getSteganoMarkerSizeInBits() const = 0;
-    virtual void applyToEveryPixelInRangeRaw(std::unique_ptr<NsPixelStrategy::PixelStrategy> op, const int start, const int end) = 0;
+    virtual void applyToEveryPixelInRangeRaw(std::shared_ptr<NsPixelStrategy::PixelStrategy> op, const int start, const int end) = 0;
 };
 
 

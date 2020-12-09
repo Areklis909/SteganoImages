@@ -39,15 +39,6 @@ int ImageHandler::rows() const { return image.rows; }
 
 int ImageHandler::cols() const { return image.cols; }
 
-const std::string &ImageHandler::getSteganoMarker() const {
-  return steganoMarker;
-}
-
-size_t ImageHandler::getSteganoMarkerSizeInBits() const {
-  using namespace NsConstData;
-  return steganoMarker.size() * bitsInByte;
-}
-
 int ImageHandler::getNumOfPixels() const { return numOfPixels; }
 
 void ImageHandler::verifyMessageSize(const size_t messageSize,
@@ -55,14 +46,14 @@ void ImageHandler::verifyMessageSize(const size_t messageSize,
   using namespace NsConstData;
   using namespace NsMessageTooBigException;
   const size_t maxSize =
-      (cols() * rows()) - msgSizeMarkerSizeInBits - markerSize;
+      (cols() * rows()) - ConstData::instance().msgSizeMarkerSizeInBits() - markerSize;
   if (messageSize > maxSize) {
     throw MessageTooBigException();
   }
 }
 
 void ImageHandler::applyToEveryPixelInRangeRaw(
-    std::unique_ptr<NsPixelStrategy::PixelStrategy> op, const int start,
+    std::shared_ptr<NsPixelStrategy::PixelStrategy> op, const int start,
     const int end) {
 
   if (start > end) {

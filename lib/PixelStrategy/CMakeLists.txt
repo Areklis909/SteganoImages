@@ -8,4 +8,4 @@ project(${TARGET} VERSION 1.0.1)
 
 add_library(${TARGET} EncryptPixel.cpp)
 
-target_link_libraries(${TARGET})
+target_link_libraries(${TARGET} ConstData)

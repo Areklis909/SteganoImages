@@ -3,14 +3,22 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <string>
 
 namespace NsConstData {
 
-const int bitsInByte = 8;
-const int msgMarkerStartPoint = 0;
-const int msgSizeSize = 8;
-const int msgSizeMarkerSizeInBits = msgSizeSize * bitsInByte;
-    // sizeof(size_t) * bitsInByte; // where message starts
+class ConstData {
+  ConstData() = default;
+  ConstData(const ConstData &) = default;
+public:
+  static ConstData &instance();
+  int bitsInByte() const;
+  int msgMarkerStartPoint() const;
+  int msgSizeSize() const;
+  int msgSizeMarkerSizeInBits() const;
+  std::string steganoMarker() const;
+  int getSteganoMarkerSizeInBits() const;
+};
 
 } // namespace NsConstData
 

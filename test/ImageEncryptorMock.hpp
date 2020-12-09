@@ -2,6 +2,7 @@
 #define IMAGE_ENCRYPTOR_MOCK
 
 #include "gmock/gmock.h"
+#include "gtest/gtest.h"
 #include <ImageEncryptor/ImageEncryptorInterface.hpp>
 #include <ImageHandler/ImageHandlerInterface.hpp>
 #include <memory>

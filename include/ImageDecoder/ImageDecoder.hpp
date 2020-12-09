@@ -3,21 +3,22 @@
 
 #include <BitwiseOperations/BitwiseOperations.hpp>
 #include <ConstData/ConstData.hpp>
-#include <ImageHandler/ImageHandler.hpp>
-#include <sstream>
+#include <ImageHandler/ImageHandlerInterface.hpp>
+#include <ImageDecoder/ImageDecoderInterface.hpp>
+#include <memory>
 
 namespace NsImageDecoder {
 
-class ImageDecoder : public NsBitwiseOperations::BitwiseOperations {
+class ImageDecoder : public NsBitwiseOperations::BitwiseOperations, ImageDecoderInterface {
 
-  NsImageHandler::ImageHandler image;
+  std::unique_ptr<NsImageHandler::ImageHandlerInterface> handler;
 
-  size_t getMessageSize();
-  std::string getMessage(const size_t startPoint);
-  bool findSteganoMarker();
-  std::string getContent(const size_t start, const size_t messageSize);
+  size_t getMessageSize() override;
+  std::string getMessage(const size_t messageSize) override;
+  bool findSteganoMarker() override;
+  // std::string getContent(const size_t start, const size_t messageSize);
 public:
-  ImageDecoder(const std::string &imagePath);
+  ImageDecoder(std::unique_ptr<NsImageHandler::ImageHandlerInterface> hdl);
 
   std::string readMessage();
 };

@@ -18,9 +18,7 @@ public:
     MOCK_METHOD(int, cols, (), (const, override));
     MOCK_METHOD(int, getNumOfPixels, (), (const, override));
     MOCK_METHOD(void, verifyMessageSize, (const size_t, const size_t), (override));
-    MOCK_METHOD(const std::string &, getSteganoMarker, (), (const, override));
-    MOCK_METHOD(size_t, getSteganoMarkerSizeInBits, (), (const, override));
-    MOCK_METHOD(void, applyToEveryPixelInRangeRaw, (std::unique_ptr<NsPixelStrategy::PixelStrategy>, const int, const int), (override));
+    MOCK_METHOD(void, applyToEveryPixelInRangeRaw, (std::shared_ptr<NsPixelStrategy::PixelStrategy>, const int, const int), (override));
 };
 
 

@@ -9,4 +9,4 @@ project(${TARGET} VERSION 1.0.1)
 add_library(${TARGET} ImageDecoder.cpp)
 
 target_link_libraries(${TARGET}
-    ImageHandler NotSteganoException)
+    ImageHandler NotSteganoException ConstData)

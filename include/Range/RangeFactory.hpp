@@ -19,7 +19,7 @@ public:
 
     using namespace NsConstData;
     MessageSizeFinder<decltype(message)> sizeFinder;
-    const int msgSizeInBits = sizeFinder.getSize(message) * bitsInByte;
+    const int msgSizeInBits = sizeFinder.getSize(message) * ConstData::instance().bitsInByte();
     if (msgSizeInBits > maxPixels) {
       throw std::runtime_error("Message is too big!");
     }

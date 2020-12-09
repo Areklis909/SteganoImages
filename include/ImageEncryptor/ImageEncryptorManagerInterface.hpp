@@ -1,6 +1,6 @@
 #include <string>
 #include <memory>
-#include "ImageEncryptorFactory.hpp"
+#include "ImageEncryptorFactoryInterface.hpp"
 
 namespace NsImageEncryptor {
 

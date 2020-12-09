@@ -3,10 +3,11 @@
 
 #include <ImageDecoder/ImageDecoder.hpp>
 #include <NotSteganoException/NotSteganoException.hpp>
+#include <utility>
 
 namespace NsImageDecoder {
 
-ImageDecoder::ImageDecoder(const std::string &imagePath) : image(imagePath) {}
+ImageDecoder::ImageDecoder(std::unique_ptr<NsImageHandler::ImageHandlerInterface> hdl) : handler(std::move(hdl)) {}
 
 size_t ImageDecoder::getMessageSize() {
   using namespace NsConstData;
@@ -31,11 +32,11 @@ std::string ImageDecoder::readMessage() {
   return msg;
 }
 
-std::string ImageDecoder::getContent(const size_t start,
-                                     const size_t messageSize) {
+// std::string ImageDecoder::getContent(const size_t start,
+//                                      const size_t messageSize) {
   // using namespace NsConstData;
 
-  std::stringstream stream;
+  // std::stringstream stream;
   // unsigned char currentCharacter{0};
   // int32_t index{0};
   // auto assembleTheMessage = [&](const unsigned char byte) {
@@ -50,18 +51,20 @@ std::string ImageDecoder::getContent(const size_t start,
   // };
   // image.applyToEveryPixelInRangeRaw(start,
   //                                   start + messageSize);
-  return stream.str();
-}
+//   return stream.str();
+// }
 
 bool ImageDecoder::findSteganoMarker() {
   using namespace NsConstData;
-  const std::string marker = getContent(msgMarkerStartPoint, image.getSteganoMarkerSizeInBits());
-  return marker.compare(image.getSteganoMarker()) == 0;
+  return false;
+  // const std::string marker = getContent(ConstData::instance().msgMarkerStartPoint(), ConstData::instance().getSteganoMarkerSizeInBits());
+  // return marker.compare(ConstData::instance().steganoMarker()) == 0;
 }
 
 std::string ImageDecoder::getMessage(const size_t messageSize) {
   using namespace NsConstData;
-  return getContent(image.getSteganoMarkerSizeInBits() + msgSizeMarkerSizeInBits, messageSize);
+  return {};
+  // return getContent(ConstData::instance().getSteganoMarkerSizeInBits() + ConstData::instance().msgSizeMarkerSizeInBits(), messageSize);
 }
 
 } // namespace NsImageDecoder

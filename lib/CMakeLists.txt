@@ -1,3 +1,4 @@
+add_subdirectory(ConstData)
 add_subdirectory(ImageHandler)
 add_subdirectory(ImageEncryptor)
 add_subdirectory(ImageDecoder)

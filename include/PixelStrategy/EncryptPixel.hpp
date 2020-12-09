@@ -1,26 +1,23 @@
 #ifndef ENCRYPT_PIXEL_HPP
 #define ENCRYPT_PIXEL_HPP
 
-#include "PixelStrategy.hpp"
+#include "WriteStrategy.hpp"
 #include <ConstData/ConstData.hpp>
 #include <BitwiseOperations/BitwiseOperations.hpp>
 
 namespace NsPixelStrategy {
 
-template <typename MessageType>
-class EncryptPixel : public PixelStrategy,
+class EncryptPixel : public WriteStrategy,
                      public NsBitwiseOperations::BitwiseOperations {
 
-  int index = 0;
-  const MessageType message;
-
 public:
-  EncryptPixel(const MessageType &msg) : message(msg) {}
+  EncryptPixel() = default;
+  ~EncryptPixel() = default;
 
   virtual char pixelOperation(char byte) override {
     using namespace NsConstData;
-    const unsigned char tmp = message.at(index / bitsInByte);
-    const int bitNum = index % bitsInByte;
+    const unsigned char tmp = message.at(index / ConstData::instance().bitsInByte());
+    const int bitNum = index % ConstData::instance().bitsInByte();
     const bool val = checkBit(tmp, bitNum);
     byte = setFirstBit(byte, val);
     ++index;

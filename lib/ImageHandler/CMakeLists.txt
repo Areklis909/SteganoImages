@@ -9,4 +9,4 @@ project(${TARGET} VERSION 1.0.1)
 add_library(${TARGET} ImageHandler.cpp)
 
 target_link_libraries(${TARGET}
-    opencv_imgcodecs MessageTooBigException)
+    opencv_imgcodecs MessageTooBigException ConstData)

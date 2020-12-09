@@ -4,6 +4,7 @@
 #include <ConstData/ConstData.hpp>
 #include <ImageHandler/ImageHandlerInterface.hpp>
 #include <Range/RangeFactory.hpp>
+#include <PixelStrategy/WriteStrategy.hpp>
 #include <memory>
 #include <string>
 
@@ -13,7 +14,7 @@ class ImageEncryptorInterface {
 
 protected:
   std::unique_ptr<NsImageHandler::ImageHandlerInterface> handler;
-
+  std::shared_ptr<NsPixelStrategy::WriteStrategy> strategy;
 public:
   ImageEncryptorInterface(
       std::unique_ptr<NsImageHandler::ImageHandlerInterface> h)
@@ -21,6 +22,8 @@ public:
   virtual ~ImageEncryptorInterface() = default;
 
   virtual void encryptData(const std::string &message) = 0;
+
+  void setStrategy(std::shared_ptr<NsPixelStrategy::WriteStrategy> s);
 
   void encryptMarker();
 

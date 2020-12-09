@@ -2,7 +2,7 @@
 #define TASK_DETAIL_HPP
 
 #include <Range/Range.hpp>
-#include <string_view>
+#include <string>
 #include <vector>
 
 namespace NsTaskDetail {
@@ -13,12 +13,12 @@ namespace NsTaskDetail {
 
 class TaskDetail {
 
-  const std::string_view submessage;
+  const std::string submessage;
   const NsRange::Range range;
 
 public:
-  TaskDetail(const std::string_view &submessage, const NsRange::Range &range);
-  std::string_view getMessage() const;
+  TaskDetail(const std::string &submessage, const NsRange::Range &range);
+  std::string getMessage() const;
   NsRange::Range getRange() const;
 };
 
@@ -37,7 +37,7 @@ public:
 private:
   const size_t noThreads;
   
-  std::vector<std::string_view>
+  std::vector<std::string>
   divideIntoSubmessages(const std::string &message,
                         const std::vector<NsRange::Range> &ranges);
 

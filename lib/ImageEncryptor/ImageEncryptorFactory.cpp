@@ -4,6 +4,7 @@
 #include <ImageEncryptor/SingleImageEncryptor.hpp>
 #include <ImageEncryptor/MultiImageEncryptor.hpp>
 #include <ImageHandler/ImageHandler.hpp>
+#include <PixelStrategy/EncryptPixel.hpp>
 
 namespace NsImageEncryptor {
 
@@ -18,6 +19,7 @@ std::unique_ptr<ImageEncryptorInterface> ImageEncryptorFactory::get(const std::s
     } else {
         throw std::runtime_error("Incorrect Encryptor type!");
     }
+    ret->setStrategy(std::make_shared<NsPixelStrategy::EncryptPixel>());
     return ret;
 }
 
